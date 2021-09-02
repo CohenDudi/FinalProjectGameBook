@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "375107702274",
+    "project_id": "finalprojectgamebook",
+    "storage_bucket": "finalprojectgamebook.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:375107702274:android:a1a67f4b62f95ab399e11b",
+        "android_client_info": {
+          "package_name": "com.example.finalprojectgamebook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "375107702274-e3el6f72j3abjr4hnh8b9mjg9tgnrkgv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDP-EkDkhDTFW0Np4rJDyLD-RFZPi84KQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "375107702274-e3el6f72j3abjr4hnh8b9mjg9tgnrkgv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
