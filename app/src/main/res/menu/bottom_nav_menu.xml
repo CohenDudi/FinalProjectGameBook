@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_feed"
+        android:icon="@drawable/feed_icon"
+        android:title="Feed" />
+
+    <item
+        android:id="@+id/navigation_favorite"
+        android:icon="@drawable/favorite_star_icon"
+        android:title="Favorite" />
+
+
+</menu>

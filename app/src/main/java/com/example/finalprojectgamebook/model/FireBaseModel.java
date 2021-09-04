@@ -18,8 +18,6 @@ public class FireBaseModel {
     private FirebaseAuth firebaseAuth;
     private MutableLiveData<FirebaseUser> userMutableLiveData;
 
-
-
     public FireBaseModel(Application application){
         this.application = application;
         firebaseAuth = FirebaseAuth.getInstance();
@@ -38,10 +36,34 @@ public class FireBaseModel {
         });
     }
 
+    public void login(String email, String password){
+        firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful())
+                    Toast.makeText(application,"Sign in successful", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(application,"Sign in failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     public MutableLiveData<FirebaseUser> getUserMutableLiveData() {
         return userMutableLiveData;
 
     }
 
+    public FirebaseUser getUser(){
+        final FirebaseUser user = firebaseAuth.getCurrentUser();
+        return user;
+    }
+
+    public void setNewListener(FirebaseAuth.AuthStateListener authStateListener){
+        firebaseAuth.addAuthStateListener(authStateListener);
+    }
+
+    public void signOut(){
+        firebaseAuth.signOut();
+    }
 
 }
