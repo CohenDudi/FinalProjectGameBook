@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "375107702274",
+    "firebase_url": "https://finalprojectgamebook-default-rtdb.firebaseio.com",
     "project_id": "finalprojectgamebook",
     "storage_bucket": "finalprojectgamebook.appspot.com"
   },
@@ -10,6 +11,64 @@
         "mobilesdk_app_id": "1:375107702274:android:a1a67f4b62f95ab399e11b",
         "android_client_info": {
           "package_name": "com.example.finalprojectgamebook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "375107702274-e3el6f72j3abjr4hnh8b9mjg9tgnrkgv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDP-EkDkhDTFW0Np4rJDyLD-RFZPi84KQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "375107702274-e3el6f72j3abjr4hnh8b9mjg9tgnrkgv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:375107702274:android:36a9d84ffaca4ec299e11b",
+        "android_client_info": {
+          "package_name": "com.learntodroid.firebaseauthloginregistermvvm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "375107702274-e3el6f72j3abjr4hnh8b9mjg9tgnrkgv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDP-EkDkhDTFW0Np4rJDyLD-RFZPi84KQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "375107702274-e3el6f72j3abjr4hnh8b9mjg9tgnrkgv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:375107702274:android:c90294a64580d63799e11b",
+        "android_client_info": {
+          "package_name": "syntax.org.il.finalprojectgamebook"
         }
       },
       "oauth_client": [

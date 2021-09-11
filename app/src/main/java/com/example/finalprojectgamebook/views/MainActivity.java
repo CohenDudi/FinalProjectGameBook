@@ -54,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        fireBase = new FireBaseModel(this.getApplication());
+        fireBase = FireBaseModel.getInstance();
+        fireBase.setApp(this.getApplication());
         loginRegisterViewModel = new LoginRegisterViewModel(this.getApplication());
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);
@@ -192,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
     public void createBottomNav(){
         BottomNavigationView navView = findViewById(R.id.nav_view);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_feed, R.id.navigation_favorite)
+                R.id.navigation_feed, R.id.navigation_favorite, R.id.navigation_add)
                 .build();
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);

@@ -11,5 +11,9 @@
         android:icon="@drawable/favorite_star_icon"
         android:title="Favorite" />
 
+    <item
+        android:id="@+id/navigation_add"
+        android:icon="@drawable/ic_baseline_add_circle_24"
+        android:title="Add" />
 
 </menu>

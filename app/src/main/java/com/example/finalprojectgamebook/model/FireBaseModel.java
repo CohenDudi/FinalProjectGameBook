@@ -1,6 +1,7 @@
 package com.example.finalprojectgamebook.model;
 
 import android.app.Application;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -12,16 +13,48 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FireBaseModel {
+    private static FireBaseModel single_instance = null;
     private Application application;
     private FirebaseAuth firebaseAuth;
     private MutableLiveData<FirebaseUser> userMutableLiveData;
 
-    public FireBaseModel(Application application){
-        this.application = application;
+
+    private DatabaseReference mDatabase;
+    private DatabaseReference mDatabaseSections;
+    List<Section> sections = new ArrayList<>();
+
+
+    private FireBaseModel(){
         firebaseAuth = FirebaseAuth.getInstance();
         userMutableLiveData = new MutableLiveData<>();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabaseSections = FirebaseDatabase.getInstance().getReference("section");
+        readSections();
+    }
+
+
+    public DatabaseReference getmDatabase(){
+        return mDatabase;
+    }
+
+    public static FireBaseModel getInstance(){
+        if (single_instance == null)
+            single_instance = new FireBaseModel();
+        return single_instance;
+    }
+
+    public void setApp(Application application){
+        this.application = application;
     }
 
     public void register(String email, String password){
@@ -62,8 +95,57 @@ public class FireBaseModel {
         firebaseAuth.addAuthStateListener(authStateListener);
     }
 
+    public void addNewSection(Section section){
+        sections.add(section);
+        mDatabase.child("section").setValue(sections);
+    }
+
+    /**
+    public List<Section> getSections(){
+
+        mDatabase.child("section").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Section section = snapshot.getValue(Section.class);
+                        sections.add(section);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        return sections;
+    }
+    **/
+    public void readSections(){
+        mDatabase.child("section").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                sections.clear();
+                if(dataSnapshot.exists()) {
+                    for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Section section = snapshot.getValue(Section.class);
+                        sections.add(section);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     public void signOut(){
         firebaseAuth.signOut();
     }
 
+    public List<Section> getSections(){
+        return sections;
+    }
 }

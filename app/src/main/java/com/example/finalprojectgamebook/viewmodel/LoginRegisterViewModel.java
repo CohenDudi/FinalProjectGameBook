@@ -19,7 +19,7 @@ public class LoginRegisterViewModel extends AndroidViewModel {
     public LoginRegisterViewModel(@NonNull Application application) {
         super(application);
 
-        fireBase = new FireBaseModel(application);
+        fireBase =  FireBaseModel.getInstance();
         userMutableLiveData = fireBase.getUserMutableLiveData();
 
     }

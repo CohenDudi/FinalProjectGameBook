@@ -7,7 +7,6 @@
     <fragment
         android:id="@+id/navigation_feed"
         android:name="com.example.finalprojectgamebook.views.feedFragment"
-        android:label="fragment_feed"
         tools:layout="@layout/fragment_feed" >
         <action
             android:id="@+id/action_navigation_feed_to_navigation_favorite"
@@ -16,10 +15,13 @@
     <fragment
         android:id="@+id/navigation_favorite"
         android:name="com.example.finalprojectgamebook.views.favoriteFragment"
-        android:label="fragment_favorite"
         tools:layout="@layout/fragment_favorite" >
         <action
             android:id="@+id/action_navigation_favorite_to_navigation_feed"
             app:destination="@id/navigation_feed" />
     </fragment>
+    <fragment
+        android:id="@+id/navigation_add"
+        android:name="com.example.finalprojectgamebook.views.addFragment"
+        tools:layout="@layout/fragment_add" />
 </navigation>
