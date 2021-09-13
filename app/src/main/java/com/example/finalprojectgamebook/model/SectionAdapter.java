@@ -42,9 +42,6 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.SectionV
             super(itemView);
 
             name = itemView.findViewById(R.id.section_name);
-            type = itemView.findViewById(R.id.section_type);
-            description = itemView.findViewById(R.id.section_desc);
-
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -75,9 +72,6 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.SectionV
 
         Section section = sections.get(position);
         holder.name.setText(section.getName());
-        holder.type.setText(section.getType());
-        holder.description.setText(section.getDescription());
-
     }
 
     @Override

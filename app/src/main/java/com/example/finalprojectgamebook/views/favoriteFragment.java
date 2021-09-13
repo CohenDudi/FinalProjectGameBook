@@ -12,10 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import com.example.finalprojectgamebook.R;
 import com.example.finalprojectgamebook.viewmodel.favoriteViewModel;
 import com.example.finalprojectgamebook.viewmodel.feedViewModel;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class favoriteFragment extends Fragment {
     private favoriteViewModel favoriteViewModel;
@@ -25,7 +27,6 @@ public class favoriteFragment extends Fragment {
         favoriteViewModel = new ViewModelProvider(this).get(favoriteViewModel.class);
         View root = inflater.inflate(R.layout.fragment_favorite, container, false);
         final TextView textView = root.findViewById(R.id.favorite_text);
-
         favoriteViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
@@ -34,4 +35,5 @@ public class favoriteFragment extends Fragment {
         });
         return root;
     }
+
 }

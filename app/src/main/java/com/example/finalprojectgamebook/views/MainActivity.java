@@ -1,12 +1,14 @@
 package com.example.finalprojectgamebook.views;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -161,9 +163,10 @@ public class MainActivity extends AppCompatActivity {
                 final FirebaseUser user = loginRegisterViewModel.getUser();
 
                 if(user != null) {//sign up or sign in
-
+                    loginRegisterViewModel.updateName(fullName);
+                    fullName = null;
                     userTv.setText(user.getDisplayName() + " logged in");
-                    toolbar.setTitle(user.getEmail());
+                    toolbar.setTitle(user.getDisplayName());
 
                     navigationView.getMenu().findItem(R.id.item_sign_in).setVisible(false);
                     navigationView.getMenu().findItem(R.id.item_sign_up).setVisible(false);
@@ -193,13 +196,44 @@ public class MainActivity extends AppCompatActivity {
     public void createBottomNav(){
         BottomNavigationView navView = findViewById(R.id.nav_view);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_feed, R.id.navigation_favorite, R.id.navigation_add)
+                R.id.navigation_feed, R.id.navigation_favorite,R.id.navigation_games, R.id.navigation_add)
                 .build();
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
+
+        BottomNavigationView navViewSection = findViewById(R.id.nav_view_section);
+        AppBarConfiguration appBarConfigurationSection = new AppBarConfiguration.Builder(
+                R.id.navigation_discover, R.id.navigation_chat)
+                .build();
+
+        NavController navControllerSection = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(this, navControllerSection, appBarConfigurationSection);
+        NavigationUI.setupWithNavController(navViewSection, navControllerSection);
+
+
+
+        navControllerSection.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+            @Override
+            public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
+                if(destination.getId() == R.id.navigation_chat || destination.getId() == R.id.navigation_discover) {
+                    //navView.setVisibility(View.GONE);
+                    navViewSection.setVisibility(View.VISIBLE);
+                } else {
+                    //toolbar.setVisibility(View.VISIBLE);
+                    navViewSection.setVisibility(View.GONE);
+                }
+
+            }
+        });
+
+
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }

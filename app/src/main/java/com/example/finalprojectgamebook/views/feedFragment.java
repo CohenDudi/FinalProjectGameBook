@@ -30,49 +30,12 @@ import java.util.List;
 
 public class feedFragment extends Fragment {
     private feedViewModel feedViewModel;
-    List<Section> sections = new ArrayList<>();
 
-    SectionAdapter adapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         feedViewModel = new ViewModelProvider(this).get(feedViewModel.class);
         View root = inflater.inflate(R.layout.fragment_feed, container, false);
 
-        RecyclerView recyclerView = root.findViewById(R.id.recycler);
-
-        sections = feedViewModel.getSections();
-        adapter = new SectionAdapter(sections);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(adapter);
-        adapter.setListener(new SectionAdapter.SectionListener() {
-            @Override
-            public void onMissionClicked(int position, View view) {
-
-            }
-
-            @Override
-            public void onMissionLongClicked(int position, View view) {
-
-            }
-        });
-        updateFeed();
         return root;
-    }
-
-    public void updateFeed(){
-        feedViewModel.getFireBase().child("section").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                sections = feedViewModel.getSections();
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-
-        });
     }
 }

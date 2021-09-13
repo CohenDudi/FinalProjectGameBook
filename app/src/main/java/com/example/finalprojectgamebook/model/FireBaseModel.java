@@ -13,6 +13,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,10 +28,7 @@ public class FireBaseModel {
     private Application application;
     private FirebaseAuth firebaseAuth;
     private MutableLiveData<FirebaseUser> userMutableLiveData;
-
-
     private DatabaseReference mDatabase;
-    private DatabaseReference mDatabaseSections;
     List<Section> sections = new ArrayList<>();
 
 
@@ -38,7 +36,6 @@ public class FireBaseModel {
         firebaseAuth = FirebaseAuth.getInstance();
         userMutableLiveData = new MutableLiveData<>();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabaseSections = FirebaseDatabase.getInstance().getReference("section");
         readSections();
     }
 
@@ -57,6 +54,7 @@ public class FireBaseModel {
         this.application = application;
     }
 
+
     public void register(String email, String password){
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(application.getMainExecutor(), new OnCompleteListener<AuthResult>() {
             @Override
@@ -67,7 +65,21 @@ public class FireBaseModel {
                     Toast.makeText(application,"register failed"+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+
+
     }
+
+    public void updateName(String fullName){
+            if(fullName != null){
+                getUser().updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(fullName).build()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                    }
+                });
+            }
+        }
+
 
     public void login(String email, String password){
         firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -100,27 +112,6 @@ public class FireBaseModel {
         mDatabase.child("section").setValue(sections);
     }
 
-    /**
-    public List<Section> getSections(){
-
-        mDatabase.child("section").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()) {
-                    for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        Section section = snapshot.getValue(Section.class);
-                        sections.add(section);
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        return sections;
-    }
-    **/
     public void readSections(){
         mDatabase.child("section").addValueEventListener(new ValueEventListener() {
             @Override

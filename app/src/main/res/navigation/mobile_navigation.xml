@@ -24,4 +24,31 @@
         android:id="@+id/navigation_add"
         android:name="com.example.finalprojectgamebook.views.addFragment"
         tools:layout="@layout/fragment_add" />
+
+    <fragment
+        android:id="@+id/navigation_games"
+        android:name="com.example.finalprojectgamebook.views.gameFragment"
+        tools:layout="@layout/fragment_game" >
+        <action
+            android:id="@+id/action_navigation_games_to_sectionFragment"
+            app:destination="@id/sectionFragment" />
+        <action
+            android:id="@+id/action_navigation_games_to_navigation_discover"
+            app:destination="@id/navigation_discover" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/sectionFragment"
+        android:name="com.example.finalprojectgamebook.views.sectionFragment"
+        tools:layout="@layout/fragment_section" />
+
+    <fragment
+        android:id="@+id/navigation_chat"
+        android:name="com.example.finalprojectgamebook.views.SectionChatFragment"
+        tools:layout="@layout/fragment_section_chat" />
+
+    <fragment
+        android:id="@+id/navigation_discover"
+        android:name="com.example.finalprojectgamebook.views.SectionHomeFragment"
+        tools:layout="@layout/fragment_section_home" />
 </navigation>

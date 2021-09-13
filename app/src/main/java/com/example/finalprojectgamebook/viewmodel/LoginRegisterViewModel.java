@@ -27,6 +27,8 @@ public class LoginRegisterViewModel extends AndroidViewModel {
     public void register(String email, String password){
         fireBase.register(email, password);
     }
+
+    public void updateName(String fullName){fireBase.updateName(fullName);}
     public void login(String email, String password){
         fireBase.login(email, password);
     }

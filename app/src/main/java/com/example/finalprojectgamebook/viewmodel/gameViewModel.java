@@ -11,13 +11,13 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.ArrayList;
 import java.util.List;
 
-public class feedViewModel extends ViewModel {
+public class gameViewModel extends ViewModel {
     private MutableLiveData<String> mText;
     private FireBaseModel fireBaseModel;
+    List<Section> sections = new ArrayList<>();
 
-    public feedViewModel() {
+    public gameViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is feed fragment");
         fireBaseModel = FireBaseModel.getInstance();
         //sections = fireBaseModel.getSections();
 
@@ -25,6 +25,15 @@ public class feedViewModel extends ViewModel {
 
     public LiveData<String> getText() {
         return mText;
+    }
+
+
+    public List<Section> getSections(){
+        return fireBaseModel.getSections();
+    }
+
+    public DatabaseReference getFireBase(){
+        return fireBaseModel.getmDatabase();
     }
 
 }
