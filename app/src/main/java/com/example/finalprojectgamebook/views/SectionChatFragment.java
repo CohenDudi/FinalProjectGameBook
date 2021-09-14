@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,6 +28,7 @@ import com.example.finalprojectgamebook.model.ChatSectionAdapter;
 import com.example.finalprojectgamebook.model.FireBaseSectionChat;
 import com.example.finalprojectgamebook.model.Section;
 import com.example.finalprojectgamebook.model.SectionAdapter;
+import com.example.finalprojectgamebook.model.User;
 import com.example.finalprojectgamebook.viewmodel.feedViewModel;
 import com.example.finalprojectgamebook.viewmodel.sectionViewModel;
 import com.google.firebase.auth.FirebaseUser;
@@ -70,6 +72,7 @@ public class SectionChatFragment extends Fragment {
         ImageButton imageButton = root.findViewById(R.id.msg_btn_chat);
 
         adapter = new ChatSectionAdapter(chats);
+        adapter.setUserId(sectionViewModel.getUser().getUid());
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
@@ -77,6 +80,18 @@ public class SectionChatFragment extends Fragment {
         user = sectionViewModel.getUser();
         updateFeed();
 
+
+        adapter.setListener(new ChatSectionAdapter.chatListener() {
+            @Override
+            public void onChatClicked(int position, View view) {
+                sectionViewModel.addNewContact(new User(chats.get(position).getName(),chats.get(position).getUserId()));
+            }
+
+            @Override
+            public void onChatLongClicked(int position, View view) {
+
+            }
+        });
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override

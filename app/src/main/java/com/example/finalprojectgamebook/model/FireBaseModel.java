@@ -30,6 +30,7 @@ public class FireBaseModel {
     private MutableLiveData<FirebaseUser> userMutableLiveData;
     private DatabaseReference mDatabase;
     List<Section> sections = new ArrayList<>();
+    List<User> users = new ArrayList<>();
 
 
     private FireBaseModel(){
@@ -37,6 +38,7 @@ public class FireBaseModel {
         userMutableLiveData = new MutableLiveData<>();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         readSections();
+        readContacts();
     }
 
 
@@ -112,6 +114,12 @@ public class FireBaseModel {
         mDatabase.child("section").setValue(sections);
     }
 
+    public void addNewContact(User user){
+        users.add(user);
+        mDatabase.child("contact").child(getUser().getUid()).setValue(users);
+    }
+
+
     public void readSections(){
         mDatabase.child("section").addValueEventListener(new ValueEventListener() {
             @Override
@@ -132,6 +140,26 @@ public class FireBaseModel {
         });
     }
 
+    public void readContacts(){
+            mDatabase.child("contact").child(getUser().getUid()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()) {
+                        users.clear();
+                        for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            User user = snapshot.getValue(User.class);
+                            users.add(user);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+    }
+
     public void signOut(){
         firebaseAuth.signOut();
     }
@@ -139,4 +167,10 @@ public class FireBaseModel {
     public List<Section> getSections(){
         return sections;
     }
+
+    public List<User> getContacts(){
+        return users;
+    }
+
+
 }

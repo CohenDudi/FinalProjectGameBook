@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         fireBase = FireBaseModel.getInstance();
         fireBase.setApp(this.getApplication());
         loginRegisterViewModel = new LoginRegisterViewModel(this.getApplication());
-        drawerLayout = findViewById(R.id.drawer_layout);
+        //drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);
         coordinatorLayout = findViewById(R.id.coordinator);
 
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                drawerLayout.closeDrawers();
+                //drawerLayout.closeDrawers();
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 View dialogView  = getLayoutInflater().inflate(R.layout.sign_d,null);
@@ -196,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
     public void createBottomNav(){
         BottomNavigationView navView = findViewById(R.id.nav_view);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_feed, R.id.navigation_favorite,R.id.navigation_games, R.id.navigation_add)
+                R.id.navigation_feed, R.id.navigation_favorite,R.id.navigation_games, R.id.navigation_add, R.id.navigation_Contacts)
                 .build();
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);

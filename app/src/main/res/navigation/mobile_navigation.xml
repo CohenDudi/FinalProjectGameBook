@@ -51,4 +51,8 @@
         android:id="@+id/navigation_discover"
         android:name="com.example.finalprojectgamebook.views.SectionHomeFragment"
         tools:layout="@layout/fragment_section_home" />
+    <fragment
+        android:id="@+id/navigation_Contacts"
+        android:name="com.example.finalprojectgamebook.views.ContactsFragment"
+        tools:layout="@layout/fragment_contacts" />
 </navigation>

@@ -93,4 +93,5 @@ public class FireBaseSectionChat {
     public List<ChatSection> getChats(){
         return chats;
     }
+
 }
