@@ -141,12 +141,13 @@ public class FireBaseModel {
     }
 
     public void readContacts(){
+        if(getUser() != null) {
             mDatabase.child("contact").child(getUser().getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.exists()) {
+                    if (dataSnapshot.exists()) {
                         users.clear();
-                        for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             User user = snapshot.getValue(User.class);
                             users.add(user);
                         }
@@ -158,6 +159,7 @@ public class FireBaseModel {
 
                 }
             });
+        }
     }
 
     public void signOut(){
