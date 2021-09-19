@@ -16,7 +16,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
 
     private List<User> users;
 
-
     public ContactAdapter(List<User> users) {
         this.users = users;
     }

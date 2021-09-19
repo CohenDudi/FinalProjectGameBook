@@ -1,11 +1,13 @@
 package com.example.finalprojectgamebook.views;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -19,8 +21,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.example.finalprojectgamebook.R;
 import com.example.finalprojectgamebook.model.ChatSection;
@@ -74,7 +78,7 @@ public class SectionChatFragment extends Fragment {
         adapter = new ChatSectionAdapter(chats);
         adapter.setUserId(sectionViewModel.getUser().getUid());
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(false);
         recyclerView.setAdapter(adapter);
 
         user = sectionViewModel.getUser();
@@ -84,7 +88,8 @@ public class SectionChatFragment extends Fragment {
         adapter.setListener(new ChatSectionAdapter.chatListener() {
             @Override
             public void onChatClicked(int position, View view) {
-                sectionViewModel.addNewContact(new User(chats.get(position).getName(),chats.get(position).getUserId()));
+                openFriendProfile(position);
+                //sectionViewModel.addNewContact(new User(chats.get(position).getName(),chats.get(position).getUserId()));
             }
 
             @Override
@@ -137,6 +142,60 @@ public class SectionChatFragment extends Fragment {
             );
         }
     }
+
+
+    public void openFriendProfile(int position){
+        List<User> users = sectionViewModel.getContacts();
+        final Boolean[] ifFriends = {checkIfFriends(chats.get(position).getUserId(),users)};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(getContext());
+        View view = layoutInflaterAndroid.inflate(R.layout.friend_dialog, null);
+        builder.setView(view);
+        builder.setCancelable(false);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        Button close_btn = view.findViewById(R.id.close_btn);
+        Button add_friend_btn = view.findViewById(R.id.add_to_friend_btn);
+        TextView friendName = view.findViewById(R.id.friend_name_txt);
+
+        friendName.setText(chats.get(position).getName());
+
+        if(ifFriends[0] || chats.get(position).getUserId().equals(sectionViewModel.getUser().getUid())){
+            add_friend_btn.setEnabled(false);
+        }
+
+
+        close_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+
+        add_friend_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!ifFriends[0] ){
+                    sectionViewModel.addNewContact(new User(chats.get(position).getName(),chats.get(position).getUserId()));
+                    ifFriends[0] = true;
+                    add_friend_btn.setEnabled(false);
+                }
+
+            }
+        });
+
+
+    }
+
+    public boolean checkIfFriends(String userID,List<User> users){
+        for (User user:users) {
+            if(user.getUserId().equals(userID))return true;
+        }
+        return false;
+    }
+
 
 
 

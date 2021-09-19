@@ -49,6 +49,7 @@ public class gameFragment extends Fragment {
                 bundle.putString("game","wow");
                 bundle.putSerializable("games",sections.get(position));
                 Navigation.findNavController(view).navigate(R.id.action_navigation_games_to_navigation_discover, bundle);
+
             }
 
             @Override

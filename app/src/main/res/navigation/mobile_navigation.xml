@@ -54,5 +54,13 @@
     <fragment
         android:id="@+id/navigation_Contacts"
         android:name="com.example.finalprojectgamebook.views.ContactsFragment"
-        tools:layout="@layout/fragment_contacts" />
+        tools:layout="@layout/fragment_contacts" >
+        <action
+            android:id="@+id/action_navigation_Contacts_to_privateChatFragment"
+            app:destination="@id/navigation_Private_Chat" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_Private_Chat"
+        android:name="com.example.finalprojectgamebook.views.PrivateChatFragment"
+        tools:layout="@layout/fragment_priavte_chat" />
 </navigation>

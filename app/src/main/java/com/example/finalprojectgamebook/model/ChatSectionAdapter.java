@@ -74,6 +74,7 @@ public class ChatSectionAdapter extends RecyclerView.Adapter<ChatSectionAdapter.
         View view2 = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_card_layout_self,parent,false);
         ChatSectionAdapter.ChatViewHolder chatViewHolder = new ChatSectionAdapter.ChatViewHolder(view);
         ChatSectionAdapter.ChatViewHolder chatViewHolder2 = new ChatSectionAdapter.ChatViewHolder(view2);
+
         switch (viewType) {
             case 0: return chatViewHolder2;
             case 1: return chatViewHolder;

@@ -23,7 +23,9 @@ public class FireBaseSectionChat {
     private MutableLiveData<FirebaseUser> userMutableLiveData;
     private DatabaseReference mDatabase;
     private Section section;
-    List<ChatSection> chats = new ArrayList<>();
+    private String usersId;
+    private List<ChatSection> chats = new ArrayList<>();
+
 
     public static FireBaseSectionChat getInstance(){
         if (single_instance == null)
@@ -58,6 +60,12 @@ public class FireBaseSectionChat {
         mDatabase.child("chat").child(section.getName()).setValue(chats);
     }
 
+    public void addNewPrivateMsg(ChatSection chatSection){
+        chats.add(chatSection);
+        mDatabase.child("private chat").child(usersId).setValue(chats);
+
+    }
+
     public FirebaseUser getUser(){
         final FirebaseUser user = firebaseAuth.getCurrentUser();
         return user;
@@ -67,8 +75,30 @@ public class FireBaseSectionChat {
         return mDatabase;
     }
 
+    public void setUsersId(String usersId){
+        this.usersId = usersId;
+    }
 
+    public void readPrivateChat(){
+        mDatabase.child("private chat").child(usersId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                chats.clear();
+                if(dataSnapshot.exists()) {
+                    for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        ChatSection chatSection = snapshot.getValue(ChatSection.class);
+                        chats.add(chatSection);
+                    }
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
 
     void readChat(){
         mDatabase.child("chat").child(section.getName()).addValueEventListener(new ValueEventListener() {
