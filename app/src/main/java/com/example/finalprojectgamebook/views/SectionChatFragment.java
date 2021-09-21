@@ -178,7 +178,9 @@ public class SectionChatFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(!ifFriends[0] ){
+                    User me = new User(sectionViewModel.getUser().getDisplayName(),sectionViewModel.getUser().getUid());
                     sectionViewModel.addNewContact(new User(chats.get(position).getName(),chats.get(position).getUserId()));
+                    sectionViewModel.addNewFriendContact(me,chats.get(position).getUserId());
                     ifFriends[0] = true;
                     add_friend_btn.setEnabled(false);
                 }

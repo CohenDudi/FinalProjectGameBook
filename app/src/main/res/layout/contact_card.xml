@@ -5,17 +5,49 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardUseCompatPadding="true"
     app:cardCornerRadius="10dp"
+
     >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_people_alt_24"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"/>
+
+                <TextView
+                    android:layout_marginLeft="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="30dp"
+                    android:text="Name text"
+                    android:gravity="left"
+                    android:id="@+id/contact_name"
+                    android:layout_marginRight="5dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right">
+
+                        <ImageView
+                            android:id="@+id/msg_icon_iv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_baseline_mark_email_unread_24"
+                            android:layout_marginRight="10dp"
+                            android:visibility="invisible"
+                            />
 
 
-        <TextView
-            android:layout_marginLeft="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:text="Name text"
-            android:gravity="left"
-            android:id="@+id/contact_name"
-            android:layout_marginRight="5dp"/>
+                </LinearLayout>
+        </LinearLayout>
+
+
+
 
 </androidx.cardview.widget.CardView>

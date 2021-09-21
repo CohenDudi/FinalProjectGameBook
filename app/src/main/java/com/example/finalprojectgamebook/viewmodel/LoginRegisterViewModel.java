@@ -29,15 +29,22 @@ public class LoginRegisterViewModel extends AndroidViewModel {
     }
 
     public void updateName(String fullName){fireBase.updateName(fullName);}
+
     public void login(String email, String password){
         fireBase.login(email, password);
     }
     public FirebaseUser getUser(){ return fireBase.getUser();}
+
     public MutableLiveData<FirebaseUser> getUserMutableLiveData() {
         return userMutableLiveData;
     }
+
     public void signOut(){fireBase.signOut();}
     public void setNewListener(FirebaseAuth.AuthStateListener authStateListener){
         fireBase.setNewListener(authStateListener);
+    }
+
+    public void reloadContactAndSection(){
+        fireBase.readContacts();
     }
 }

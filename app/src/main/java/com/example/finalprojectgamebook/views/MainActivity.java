@@ -165,15 +165,19 @@ public class MainActivity extends AppCompatActivity {
                 final FirebaseUser user = loginRegisterViewModel.getUser();
 
                 if(user != null) {//sign up or sign in
-                    loginRegisterViewModel.updateName(fullName);
-                    fullName = null;
+                    if(fullName != null)
+                    {
+                        loginRegisterViewModel.updateName(fullName);
+                        fullName = null;
+                    }
+
                     userTv.setText(user.getDisplayName() + " logged in");
                     toolbar.setTitle(user.getDisplayName());
 
                     navigationView.getMenu().findItem(R.id.item_sign_in).setVisible(false);
                     navigationView.getMenu().findItem(R.id.item_sign_up).setVisible(false);
                     navigationView.getMenu().findItem(R.id.item_sign_out).setVisible(true);
-
+                    loginRegisterViewModel.reloadContactAndSection();
                     //Read the user data base - missions
 
                 }

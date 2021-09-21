@@ -47,9 +47,6 @@ public class ContactsFragment extends Fragment {
         adapter.setListener(new ContactAdapter.ContactListener() {
             @Override
             public void onContactClicked(int position, View view) {
-                //Bundle bundle = new Bundle();
-                //bundle.putString("game","wow");
-                //bundle.putSerializable("games",sections.get(position));
                 String userId1 = users.get(position).getUserId();
                 String userId2 = contactViewModel.getUser().getUid();
                 if(userId1.compareTo(userId2)>0){
@@ -60,6 +57,7 @@ public class ContactsFragment extends Fragment {
 
                 Bundle bundle = new Bundle();
                 bundle.putString("chatId",userId1+"_to_"+userId2);
+                bundle.putString("friendId",users.get(position).getUserId());
 
                 Navigation.findNavController(view).navigate(R.id.action_navigation_Contacts_to_privateChatFragment, bundle);
 
@@ -78,19 +76,22 @@ public class ContactsFragment extends Fragment {
 
 
     public void updateContact(){
-        contactViewModel.getFireBase().child("contact").child(contactViewModel.getUser().getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                users = contactViewModel.getConacts();
-                adapter.notifyDataSetChanged();
-            }
+        if (contactViewModel.getUser() != null){
+            contactViewModel.getFireBase().child("contact").child(contactViewModel.getUser().getUid()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    users = contactViewModel.getConacts();
+                    adapter.notifyDataSetChanged();
+                }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
+                }
 
-        });
+            });
+
+        }
     }
 
 

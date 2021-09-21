@@ -29,4 +29,5 @@ public class ContactViewModel extends ViewModel {
         return fireBaseModel.getUser();
     }
 
+
 }

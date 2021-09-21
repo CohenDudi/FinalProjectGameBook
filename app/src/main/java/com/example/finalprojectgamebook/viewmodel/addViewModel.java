@@ -34,6 +34,18 @@ public class addViewModel extends ViewModel {
         fireBaseModel.addNewSection(section);
     }
 
+    public int isSectionNotExist(Section s){
+        sections = fireBaseModel.getSections();
+        for (Section section:sections) {
+            if (section.getName().toLowerCase().equals(s.getName().toLowerCase()))return 1;
+            if(s.getName().equals(""))return 4;
+            if(s.getType().equals(""))return 3;
+            if(s.getDescription().equals(""))return 2;
+
+        }
+        return 0;
+    }
+
 
 
 }

@@ -3,6 +3,7 @@ package com.example.finalprojectgamebook.model;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -37,6 +38,7 @@ public class ChatSectionAdapter extends RecyclerView.Adapter<ChatSectionAdapter.
 
             TextView name;
             TextView msg;
+            ImageView newMsgIcon;
 
             public ChatViewHolder(View itemView) {
                 super(itemView);

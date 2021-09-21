@@ -33,6 +33,7 @@ import java.util.List;
 public class PrivateChatFragment extends Fragment {
     private PriavteChatViewModel priavteChatViewModel;
     String usersId;
+    String friendId;
     List<ChatSection> chats = new ArrayList<>();
     RecyclerView recyclerView;
     ChatSectionAdapter adapter;
@@ -44,6 +45,9 @@ public class PrivateChatFragment extends Fragment {
         priavteChatViewModel = new ViewModelProvider(this).get(PriavteChatViewModel.class);
         View root = inflater.inflate(R.layout.fragment_priavte_chat, container, false);
         usersId = (String)getArguments().getSerializable("chatId");
+        friendId = (String)getArguments().getSerializable("friendId");
+        priavteChatViewModel.changeMsgSeen(friendId,1);
+
         priavteChatViewModel.setUsersId(usersId);
         chats = priavteChatViewModel.getChats();
         user = priavteChatViewModel.getUser();
@@ -65,6 +69,7 @@ public class PrivateChatFragment extends Fragment {
                 priavteChatViewModel.addNewMsg(new ChatSection(user.getDisplayName(),user.getUid(),editText.getText().toString()));
                 editText.setText("");
                 hideSoftKeyboard(getActivity());
+                priavteChatViewModel.changeMsgSeen(friendId,0);
             }
         });
 
@@ -104,7 +109,9 @@ public class PrivateChatFragment extends Fragment {
         }
     }
 
-
-
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        priavteChatViewModel.changeMsgSeen(friendId,1);
+    }
 }

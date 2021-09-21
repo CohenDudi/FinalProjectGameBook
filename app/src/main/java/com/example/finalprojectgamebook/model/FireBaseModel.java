@@ -30,6 +30,7 @@ public class FireBaseModel {
     private MutableLiveData<FirebaseUser> userMutableLiveData;
     private DatabaseReference mDatabase;
     List<Section> sections = new ArrayList<>();
+    List<User> usersFriend = new ArrayList<>();
     List<User> users = new ArrayList<>();
 
 
@@ -38,8 +39,7 @@ public class FireBaseModel {
         userMutableLiveData = new MutableLiveData<>();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         readSections();
-        readContacts();
-        // readContacts();
+        //readContacts();
     }
 
 
@@ -120,9 +120,15 @@ public class FireBaseModel {
         mDatabase.child("contact").child(getUser().getUid()).setValue(users);
     }
 
+    public void addNewFriendContact(User user,String friendUserId){
+        usersFriend.add(user);
+        mDatabase.child("contact").child(friendUserId).setValue(usersFriend);
+    }
+
+
 
     public void readSections(){
-        if(getUser() != null){
+
         mDatabase.child("section").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -140,7 +146,7 @@ public class FireBaseModel {
 
             }
         });
-        }
+
     }
 
     public void readContacts(){
@@ -166,6 +172,30 @@ public class FireBaseModel {
         }
     }
 
+    public void readFriendContacts(String friendUserId){
+        mDatabase.child("contact").child(friendUserId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                usersFriend.clear();
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        User user = snapshot.getValue(User.class);
+                        usersFriend.add(user);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+
+
+
+
     public void signOut(){
         firebaseAuth.signOut();
     }
@@ -176,6 +206,29 @@ public class FireBaseModel {
 
     public List<User> getContacts(){
         return users;
+    }
+
+    public List<User> geFriendContacts(){
+        return usersFriend;
+    }
+
+    // 1 = self , 0 = friend
+    public void changeMsgSeen(String friendUserId,int sender){
+        if(sender == 1){
+            for (User user:users) {
+                if(user.getUserId().equals(friendUserId))
+                    user.readMsg(false);
+            }
+            mDatabase.child("contact").child(getUser().getUid()).setValue(users);
+        }
+        else{
+            for (User user:usersFriend) {
+                if(user.getUserId().equals(getUser().getUid()))
+                    user.readMsg(true);
+            }
+            mDatabase.child("contact").child(friendUserId).setValue(usersFriend);
+
+        }
     }
 
 

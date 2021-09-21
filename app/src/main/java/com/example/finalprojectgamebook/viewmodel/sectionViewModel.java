@@ -54,9 +54,16 @@ public class sectionViewModel extends ViewModel {
         fireBaseModel.addNewContact(user);
     }
 
+    public void addNewFriendContact(User user,String friendUserId){
+        fireBaseModel.readFriendContacts(friendUserId);
+        fireBaseModel.addNewFriendContact(user,friendUserId);
+    }
+
     public List<User> getContacts(){
         return fireBaseModel.getContacts();
     }
+
+
 
 
 }

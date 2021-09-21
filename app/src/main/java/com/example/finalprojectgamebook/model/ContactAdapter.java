@@ -3,6 +3,7 @@ package com.example.finalprojectgamebook.model;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -34,11 +35,13 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     public class ContactViewHolder extends RecyclerView.ViewHolder {
 
         TextView name;
+        ImageView newMsgIcon;
 
         public ContactViewHolder(View itemView) {
             super(itemView);
 
             name = itemView.findViewById(R.id.contact_name);
+            newMsgIcon = itemView.findViewById(R.id.msg_icon_iv);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -69,6 +72,9 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
 
         User user = users.get(position);
         holder.name.setText(user.getName());
+        if(users.get(position).getNewMsg()) holder.newMsgIcon.setVisibility(View.VISIBLE);
+        else holder.newMsgIcon.setVisibility(View.INVISIBLE);
+
     }
 
     @Override

@@ -15,8 +15,10 @@ import java.util.List;
 
 public class PriavteChatViewModel extends ViewModel {
     private FireBaseSectionChat fireBaseSectionChat;
+    private FireBaseModel fireBaseModel;
 
     public PriavteChatViewModel() {
+        fireBaseModel = FireBaseModel.getInstance();
         fireBaseSectionChat = FireBaseSectionChat.getInstance();
     }
 
@@ -40,6 +42,11 @@ public class PriavteChatViewModel extends ViewModel {
     public void setUsersId(String usersId){
         fireBaseSectionChat.setUsersId(usersId);
         fireBaseSectionChat.readPrivateChat();
+    }
+
+    public void changeMsgSeen(String friend,int sender){
+        fireBaseModel.readFriendContacts(friend);
+        fireBaseModel.changeMsgSeen(friend,sender);
     }
 
 
