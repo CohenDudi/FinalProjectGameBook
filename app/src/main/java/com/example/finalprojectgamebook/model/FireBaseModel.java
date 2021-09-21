@@ -39,6 +39,7 @@ public class FireBaseModel {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         readSections();
         readContacts();
+        // readContacts();
     }
 
 
