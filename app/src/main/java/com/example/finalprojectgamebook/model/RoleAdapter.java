@@ -3,6 +3,7 @@ package com.example.finalprojectgamebook.model;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,7 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.RoleViewHolder
     public interface RoleListener {
         void onRoleClicked(int position, View view);
         void onRoleLongClicked(int position, View view);
+        void onRemoveClicked(int position,View view);
     }
 
     private RoleAdapter.RoleListener listener;
@@ -36,6 +38,7 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.RoleViewHolder
         TextView name;
         TextView min;
         TextView max;
+        ImageButton remove;
 
 
 
@@ -45,6 +48,15 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.RoleViewHolder
             name = itemView.findViewById(R.id.roll_name);
             min = itemView.findViewById(R.id.apply_number);
             max = itemView.findViewById(R.id.max_number);
+            remove = itemView.findViewById(R.id.remove_role_btn);
+
+            remove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onRemoveClicked(getAdapterPosition(), v);
+                }
+            });
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

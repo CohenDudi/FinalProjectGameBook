@@ -32,6 +32,7 @@
             android:gravity="left"
             android:id="@+id/apply_number"
             android:layout_marginRight="5dp"/>
+
         <TextView
             android:layout_marginLeft="5dp"
             android:layout_width="wrap_content"
@@ -58,6 +59,7 @@
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/remove_role_btn"
                 android:src="@drawable/ic_baseline_remove_24"/>
 
         </LinearLayout>

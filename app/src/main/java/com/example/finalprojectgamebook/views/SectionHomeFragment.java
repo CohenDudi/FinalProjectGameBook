@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavArgument;
@@ -23,14 +24,21 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.finalprojectgamebook.R;
+import com.example.finalprojectgamebook.model.HomePostLookingForGame;
+import com.example.finalprojectgamebook.model.HomePostLookingForGameAdapter;
 import com.example.finalprojectgamebook.model.Role;
 import com.example.finalprojectgamebook.model.RoleAdapter;
 import com.example.finalprojectgamebook.model.Section;
+import com.example.finalprojectgamebook.model.SectionAdapter;
 import com.example.finalprojectgamebook.viewmodel.feedViewModel;
 import com.example.finalprojectgamebook.viewmodel.sectionViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
@@ -43,6 +51,9 @@ public class SectionHomeFragment extends Fragment {
     FloatingActionButton fab;
     View root;
     RecyclerView recyclerView;
+    TextView validInput;
+    List<HomePostLookingForGame> homePostLookingForGames = new ArrayList();
+    HomePostLookingForGameAdapter adapterHome;
 
 
     @Override
@@ -64,6 +75,7 @@ public class SectionHomeFragment extends Fragment {
          else
              section = sectionViewModel.getSection();
 
+        homePostLookingForGames = sectionViewModel.getPosts();
 
          fab.setOnClickListener(new View.OnClickListener() {
              @Override
@@ -71,6 +83,7 @@ public class SectionHomeFragment extends Fragment {
                  openDialog();
              }
          });
+        recyclerHome();
         return root;
     }
 
@@ -80,7 +93,34 @@ public class SectionHomeFragment extends Fragment {
         sectionViewModel.setSection(section);
     }
 
-    public void openDialog(){
+    public void recyclerHome(){
+        RecyclerView recyclerViewHome = root.findViewById(R.id.recyclerSectionHome);
+        adapterHome = new HomePostLookingForGameAdapter(homePostLookingForGames);
+        recyclerViewHome.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewHome.setHasFixedSize(true);
+        recyclerViewHome.setAdapter(adapterHome);
+        updatePosts();
+
+    }
+
+    public void updatePosts() {
+        sectionViewModel.getFireBase().child("section feed").child(section.getName()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                homePostLookingForGames = sectionViewModel.getPosts();
+                adapterHome.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        });
+    }
+
+
+        public void openDialog(){
         List<Role> roles = new ArrayList();
         roles.add(new Role("dps",0,3));
         roles.add(new Role("healer",0,1));
@@ -88,10 +128,6 @@ public class SectionHomeFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(getContext());
         View view = layoutInflaterAndroid.inflate(R.layout.add_post_dialog, null);
-
-
-
-
 
         builder.setView(view);
         builder.setCancelable(false);
@@ -102,19 +138,69 @@ public class SectionHomeFragment extends Fragment {
         EditText nameEt = view.findViewById(R.id.role_name_dlg);
         EditText maxEt = view.findViewById(R.id.number_dlg);
         ImageButton addBtn = view.findViewById(R.id.add_btn);
+        EditText description = view.findViewById(R.id.add_post_description);
+        //AppCompatButton closeBtn = view.findViewById(R.id.close_btn);
+        validInput = view.findViewById(R.id.input_text_invalid);
         recyclerView = view.findViewById(R.id.recyclerSectionHomeDialog);
+
         RoleAdapter adapter = new RoleAdapter(roles);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
 
+        adapter.setListener(new RoleAdapter.RoleListener() {
+            @Override
+            public void onRoleClicked(int position, View view) {
+
+            }
+
+            @Override
+            public void onRoleLongClicked(int position, View view) {
+
+            }
+
+            @Override
+            public void onRemoveClicked(int position, View view) {
+                roles.remove(position);
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Role role = new Role(nameEt.getText().toString(),0,Integer.parseInt(maxEt.getText().toString()));
-                roles.add(role);
-                adapter.notifyDataSetChanged();
-                recyclerView.scrollToPosition(roles.size()-1);
+                int number;
+                //                        Snackbar.make(root ,section.getName() + " created!" , Snackbar.LENGTH_SHORT).show();
+
+                try {
+                    number = Integer.parseInt(maxEt.getText().toString());
+                    Role role = new Role(nameEt.getText().toString(),0,Integer.parseInt(maxEt.getText().toString()));
+                    roles.add(role);
+                    adapter.notifyDataSetChanged();
+                    validInput.setVisibility(View.INVISIBLE);
+                    recyclerView.scrollToPosition(roles.size()-1);
+
+                } catch(NumberFormatException e) {
+                    validInput.setVisibility(View.VISIBLE);
+
+                } catch(NullPointerException e) {
+                    validInput.setVisibility(View.VISIBLE);
+                }
+
+            }
+        });
+        view.findViewById(R.id.close_add_btn).setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            alertDialog.dismiss();
+        }
+    });
+        view.findViewById(R.id.submit_add_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sectionViewModel.addNewPost(new HomePostLookingForGame(roles,sectionViewModel.getUser().getDisplayName(),sectionViewModel.getUser().getUid(),description.getText().toString()));
+                alertDialog.dismiss();
             }
         });
 

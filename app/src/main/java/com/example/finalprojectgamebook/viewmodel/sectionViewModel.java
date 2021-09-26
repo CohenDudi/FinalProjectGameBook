@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.finalprojectgamebook.model.ChatSection;
 import com.example.finalprojectgamebook.model.FireBaseModel;
 import com.example.finalprojectgamebook.model.FireBaseSectionChat;
+import com.example.finalprojectgamebook.model.HomePostLookingForGame;
 import com.example.finalprojectgamebook.model.Section;
 import com.example.finalprojectgamebook.model.User;
 import com.google.firebase.auth.FirebaseUser;
@@ -38,8 +39,15 @@ public class sectionViewModel extends ViewModel {
         fireBaseSectionChat.addNewSection(chatSection);
     }
 
+    public void addNewPost(HomePostLookingForGame homePostLookingForGame){
+        fireBaseSectionChat.addNewPost(homePostLookingForGame);
+    }
+
     public List<ChatSection> getChats(){
         return fireBaseSectionChat.getChats();
+    }
+    public List<HomePostLookingForGame> getPosts(){
+        return fireBaseSectionChat.getPosts();
     }
 
     public FirebaseUser getUser(){

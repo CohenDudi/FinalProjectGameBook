@@ -25,6 +25,7 @@ public class FireBaseSectionChat {
     private Section section;
     private String usersId;
     private List<ChatSection> chats = new ArrayList<>();
+    List<HomePostLookingForGame> homePostLookingForGames = new ArrayList<>();
 
 
     public static FireBaseSectionChat getInstance(){
@@ -53,12 +54,19 @@ public class FireBaseSectionChat {
 
     public void readSection(){
         readChat();
+        readHomeGames();
     }
 
     public void addNewSection(ChatSection chatSection ){
         chats.add(chatSection);
         mDatabase.child("chat").child(section.getName()).setValue(chats);
     }
+
+    public void addNewPost(HomePostLookingForGame homePostLookingForGame ){
+        homePostLookingForGames.add(homePostLookingForGame);
+        mDatabase.child("section feed").child(section.getName()).setValue(homePostLookingForGames);
+    }
+
 
     public void addNewPrivateMsg(ChatSection chatSection){
         chats.add(chatSection);
@@ -120,8 +128,34 @@ public class FireBaseSectionChat {
         });
     }
 
+    void readHomeGames(){
+        mDatabase.child("section feed").child(section.getName()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                homePostLookingForGames.clear();
+                if(dataSnapshot.exists()) {
+                    for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        HomePostLookingForGame homePostLookingForGame = snapshot.getValue(HomePostLookingForGame.class);
+                        homePostLookingForGames.add(homePostLookingForGame);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+
+
     public List<ChatSection> getChats(){
         return chats;
     }
+    public List<HomePostLookingForGame> getPosts(){
+        return homePostLookingForGames;
+    }
+
 
 }
