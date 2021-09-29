@@ -95,10 +95,27 @@ public class SectionHomeFragment extends Fragment {
 
     public void recyclerHome(){
         RecyclerView recyclerViewHome = root.findViewById(R.id.recyclerSectionHome);
-        adapterHome = new HomePostLookingForGameAdapter(homePostLookingForGames);
+        adapterHome = new HomePostLookingForGameAdapter(homePostLookingForGames,getContext(),sectionViewModel.getUser().getUid());
         recyclerViewHome.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewHome.setHasFixedSize(true);
         recyclerViewHome.setAdapter(adapterHome);
+
+        adapterHome.setListener(new HomePostLookingForGameAdapter.HomePostLookingForGameAdapterListener() {
+            @Override
+            public void onHomePostLookingForGameAdapterClicked(int position, View view) {
+
+            }
+
+            @Override
+            public void onHomePostLookingForGameAdapterLongClicked(int position, View view) {
+
+            }
+
+            @Override
+            public void onHomePostLookingForGameAdapterRecyclerClicked(int position, View view) {
+
+            }
+        });
         updatePosts();
 
     }
@@ -147,6 +164,8 @@ public class SectionHomeFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
+
+
 
         adapter.setListener(new RoleAdapter.RoleListener() {
             @Override

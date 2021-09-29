@@ -97,4 +97,7 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.RoleViewHolder
         return roles.size();
     }
 
+
+    public void test(){}
+
 }
