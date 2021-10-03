@@ -9,7 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center"
+        android:gravity="top|center"
+
         android:weightSum="6">
 
         <TextView
@@ -42,12 +43,26 @@
             android:maxLines="4"
             android:hint="type new description"/>
 
+
         <Button
-            android:layout_marginTop="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/add_picture_btn"
+            android:text="add new picture"/>
+
+
+        <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/button_new_section"
             android:text="ADD"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/img_section"
+            android:scaleType="fitXY"/>
+
 
     </LinearLayout>
 

@@ -16,6 +16,7 @@ import androidx.navigation.ui.NavigationUI;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -38,7 +39,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.messaging.FirebaseMessaging;
+//import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     LoginRegisterViewModel loginRegisterViewModel;
 
 
-    FirebaseMessaging messaging = FirebaseMessaging.getInstance();
+    //FirebaseMessaging messaging = FirebaseMessaging.getInstance();
 
 
     @Override
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         if(loginRegisterViewModel.getUser()!=null) {
-            messaging.subscribeToTopic(loginRegisterViewModel.getUser().getUid());
+            //messaging.subscribeToTopic(loginRegisterViewModel.getUser().getUid());
         }
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override

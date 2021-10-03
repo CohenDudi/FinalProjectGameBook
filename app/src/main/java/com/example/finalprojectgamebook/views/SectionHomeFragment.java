@@ -1,5 +1,7 @@
 package com.example.finalprojectgamebook.views;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,11 +18,13 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.finalprojectgamebook.R;
@@ -77,6 +81,15 @@ public class SectionHomeFragment extends Fragment {
          else
              section = sectionViewModel.getSection();
 
+         ImageView mainImg = root.findViewById(R.id.section_img);
+         TextView titleTxt = root.findViewById(R.id.section_title_txt);
+         TextView descTxt = root.findViewById(R.id.section_desc_txt);
+         Bitmap temp = StringToBitMap(section.getImg());
+         mainImg.setImageBitmap(temp);
+        titleTxt.setText(section.getName());
+        descTxt.setText(section.getDescription());
+
+
         homePostLookingForGames = sectionViewModel.getPosts();
 
          fab.setOnClickListener(new View.OnClickListener() {
@@ -88,6 +101,18 @@ public class SectionHomeFragment extends Fragment {
         recyclerHome();
         return root;
     }
+
+    public Bitmap StringToBitMap(String encodedString){
+        try {
+            byte [] encodeByte= Base64.decode(encodedString,Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch(Exception e) {
+            e.getMessage();
+            return null;
+        }
+    }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

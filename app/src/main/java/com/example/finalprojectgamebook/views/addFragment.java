@@ -1,19 +1,30 @@
 package com.example.finalprojectgamebook.views;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.ImageDecoder;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +35,8 @@ import com.example.finalprojectgamebook.viewmodel.addViewModel;
 import com.example.finalprojectgamebook.viewmodel.feedViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +47,11 @@ public class addFragment extends Fragment {
     private EditText name;
     private EditText type;
     private EditText desc;
+    private Button addImgBtn;
+    private Bitmap imageBitmap;
+    private ImageView sectionImg;
+    String encoded;
+
 
     public addFragment(){}
 
@@ -45,13 +63,14 @@ public class addFragment extends Fragment {
         name = root.findViewById(R.id.add_new_section_name);
         type = root.findViewById(R.id.add_new_section_type);
         desc = root.findViewById(R.id.add_new_section_desc);
-
+        addImgBtn = root.findViewById(R.id.add_picture_btn);
+        sectionImg = root.findViewById(R.id.img_section);
         Button buttonNewSection = root.findViewById(R.id.button_new_section);
 
         buttonNewSection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Section section = new Section(name.getText().toString(), type.getText().toString(), desc.getText().toString());
+                Section section = new Section(name.getText().toString(), type.getText().toString(), desc.getText().toString(),encoded);
                 int validateSection = addViewModel.isSectionNotExist(section);
                 switch (validateSection){
                     case 0:
@@ -76,6 +95,43 @@ public class addFragment extends Fragment {
                 }
             }
         });
+
+        ActivityResultLauncher<Intent> takePictureActivity = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            Intent data = result.getData();
+                            Uri imageUri = data.getData();
+                            try {
+                                imageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getApplicationContext().getContentResolver(), imageUri);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 10, baos); //bm is the bitmap object
+                            byte[] b = baos.toByteArray();
+                            encoded = Base64.encodeToString(b, Base64.DEFAULT);
+                            sectionImg.setImageBitmap(imageBitmap);
+
+                        }
+                    }
+                });
+
+
+        addImgBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                takePictureActivity.launch(intent);
+            }
+        });
+
+
+
+
         /**
         final TextView textView = root.findViewById(R.id.add_Text);
 

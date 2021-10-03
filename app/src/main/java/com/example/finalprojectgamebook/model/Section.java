@@ -1,5 +1,7 @@
 package com.example.finalprojectgamebook.model;
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,14 +13,16 @@ public class Section implements Serializable {
     private String type;
     private String description;
     private Set<String> usersId;
+    private String img;
 
     public Section(){}
 
-    public Section(String name,String type,String description){
+    public Section(String name,String type,String description,String img){
         this.name = name;
         this.type = type;
         this.description = description;
         this.usersId = new HashSet<>();
+        this.img = img;
     }
 
     public String getName() {
@@ -36,5 +40,14 @@ public class Section implements Serializable {
     public void addUserId(String s){
         usersId.add(s);
     }
-    
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
+
 }
