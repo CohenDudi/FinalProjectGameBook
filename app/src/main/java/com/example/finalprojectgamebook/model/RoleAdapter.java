@@ -138,6 +138,7 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.RoleViewHolder
             holder.recyclerView.setHasFixedSize(true);
             holder.recyclerView.setAdapter(adapter);
             adapter.setListener(new roleListAdapter.roleListListener() {
+                int tempPos = position;
                 @Override
                 public void onRoleListClicked(int position, View view) {
 
@@ -151,7 +152,8 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.RoleViewHolder
                 @Override
                 public void onRemoveClicked(int position, View view) {
                     role.getUsers().remove(position);
-                    FireBaseSectionChat.getInstance().updatePost(adapterPosition,position,role);
+                    role.addMin(-1);
+                    FireBaseSectionChat.getInstance().updatePost(adapterPosition,tempPos,role);
 
 
                 }
