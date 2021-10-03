@@ -38,6 +38,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     LoginRegisterViewModel loginRegisterViewModel;
 
 
+    FirebaseMessaging messaging = FirebaseMessaging.getInstance();
 
 
     @Override
@@ -70,7 +72,9 @@ public class MainActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-
+        if(loginRegisterViewModel.getUser()!=null) {
+            messaging.subscribeToTopic(loginRegisterViewModel.getUser().getUid());
+        }
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

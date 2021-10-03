@@ -24,12 +24,14 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.finalprojectgamebook.R;
+import com.example.finalprojectgamebook.model.FireBaseModel;
 import com.example.finalprojectgamebook.model.HomePostLookingForGame;
 import com.example.finalprojectgamebook.model.HomePostLookingForGameAdapter;
 import com.example.finalprojectgamebook.model.Role;
 import com.example.finalprojectgamebook.model.RoleAdapter;
 import com.example.finalprojectgamebook.model.Section;
 import com.example.finalprojectgamebook.model.SectionAdapter;
+import com.example.finalprojectgamebook.model.User;
 import com.example.finalprojectgamebook.viewmodel.feedViewModel;
 import com.example.finalprojectgamebook.viewmodel.sectionViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -94,8 +96,11 @@ public class SectionHomeFragment extends Fragment {
     }
 
     public void recyclerHome(){
+        FirebaseUser u = FireBaseModel.getInstance().getUser();
+        User user = new User(u.getDisplayName(),u.getUid());
+
         RecyclerView recyclerViewHome = root.findViewById(R.id.recyclerSectionHome);
-        adapterHome = new HomePostLookingForGameAdapter(homePostLookingForGames,getContext(),sectionViewModel.getUser().getUid());
+        adapterHome = new HomePostLookingForGameAdapter(homePostLookingForGames,getContext(),user);
         recyclerViewHome.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewHome.setHasFixedSize(true);
         recyclerViewHome.setAdapter(adapterHome);
@@ -160,7 +165,7 @@ public class SectionHomeFragment extends Fragment {
         validInput = view.findViewById(R.id.input_text_invalid);
         recyclerView = view.findViewById(R.id.recyclerSectionHomeDialog);
 
-        RoleAdapter adapter = new RoleAdapter(roles);
+        RoleAdapter adapter = new RoleAdapter(roles,0,getContext(),"",0);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
@@ -182,6 +187,11 @@ public class SectionHomeFragment extends Fragment {
             public void onRemoveClicked(int position, View view) {
                 roles.remove(position);
                 adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCreateCard(int position, View view) {
+
             }
         });
 

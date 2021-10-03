@@ -8,16 +8,18 @@ public class Role {
     private int min;
     private int max;
 
-
-    List<User> users = new ArrayList<>();
-
+    private List<User> users;
 
 
-    public Role(){}
+
+    public Role(){
+        this.users = new ArrayList<>();
+    }
     public Role(String name, int min, int max){
         this.name = name;
         this.min = min;
         this.max = max;
+        this.users = new ArrayList<>();
     }
 
     public void addUser(User user){
@@ -28,11 +30,17 @@ public class Role {
         return users;
     }
 
-    public boolean isUserInList(User user){
+    public boolean isUserInList(User s){
+        if(users.size()>0)
         for (User u:users) {
-            if(u.getUserId().equals(user.getUserId()))return true;
+            if(u.getUserId().equals(s.getUserId()))return true;
         }
         return false;
+    }
+
+    public void removeUserInList(User s){
+        //users.remove(s);
+        users.removeIf(t -> t.getUserId().equals(s.getUserId()));
     }
 
     public String getName() {
@@ -47,8 +55,8 @@ public class Role {
         return min;
     }
 
-    public void setMin(int min) {
-        this.min = min;
+    public void addMin(int min) {
+        this.min+=min;
     }
 
     public int getMax() {
@@ -58,4 +66,6 @@ public class Role {
     public void setMax(int max) {
         this.max = max;
     }
+
+
 }

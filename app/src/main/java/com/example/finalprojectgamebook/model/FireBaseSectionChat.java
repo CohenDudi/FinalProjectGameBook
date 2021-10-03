@@ -67,6 +67,19 @@ public class FireBaseSectionChat {
         mDatabase.child("section feed").child(section.getName()).setValue(homePostLookingForGames);
     }
 
+    public void updatePost(int positionSection , int positionRole , Role role){
+        Role r = homePostLookingForGames.get(positionSection).getRoles().get(positionRole);
+        mDatabase.child("section feed").child(section.getName()).child(String.valueOf(positionSection)).child("roles").child(String.valueOf(positionRole)).setValue(r);
+    }
+
+    public void updatePosts(int pos ,HomePostLookingForGame homePostLookingForGame){
+
+        mDatabase.child("section feed").child(section.getName()).child(String.valueOf(pos)).setValue(homePostLookingForGame);
+    }
+
+
+
+
 
     public void addNewPrivateMsg(ChatSection chatSection){
         chats.add(chatSection);

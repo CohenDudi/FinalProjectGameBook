@@ -1,9 +1,11 @@
 package com.example.finalprojectgamebook.model;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,11 +24,13 @@ public class HomePostLookingForGameAdapter extends RecyclerView.Adapter<HomePost
     private RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
     private Context context;
     private String selfId;
+    private User user;
 
-    public HomePostLookingForGameAdapter(List<HomePostLookingForGame> homePostLookingForGames, Context context, String selfId) {
+
+    public HomePostLookingForGameAdapter(List<HomePostLookingForGame> homePostLookingForGames, Context context, User user) {
         this.homePostLookingForGames = homePostLookingForGames;
         this.context = context;
-        this.selfId = selfId;
+        this.user = user;
     }
 
     public interface HomePostLookingForGameAdapterListener {
@@ -75,7 +79,9 @@ public class HomePostLookingForGameAdapter extends RecyclerView.Adapter<HomePost
             recyclerView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     listener.onHomePostLookingForGameAdapterRecyclerClicked(getAdapterPosition(),view);
+
                 }
             });
 
@@ -97,16 +103,17 @@ public class HomePostLookingForGameAdapter extends RecyclerView.Adapter<HomePost
         HomePostLookingForGame homePostLookingForGame = homePostLookingForGames.get(position);
         holder.description.setText(homePostLookingForGame.getDescription());
         holder.name.setText(homePostLookingForGame.getUserName());
-
-
-        RoleAdapter adapter = new RoleAdapter(homePostLookingForGame.getRoles());
+        int tempPosition = position;
+        RoleAdapter adapter = new RoleAdapter(homePostLookingForGame.getRoles(),1,context,homePostLookingForGame.getUserId(),position);
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(context));
         holder.recyclerView.setHasFixedSize(true);
         holder.recyclerView.setAdapter(adapter);
         holder.recyclerView.setRecycledViewPool(viewPool);
 
 
+
         adapter.setListener(new RoleAdapter.RoleListener() {
+            int tempPos = tempPosition;
             @Override
             public void onRoleClicked(int position, View view) {
 
@@ -118,9 +125,31 @@ public class HomePostLookingForGameAdapter extends RecyclerView.Adapter<HomePost
             }
 
             @Override
-            public void onRemoveClicked(int position, View view) {
+            public void onRemoveClicked(int pos, View view) {
+                ImageButton btn = view.findViewById(R.id.remove_role_btn);
+                Role role = homePostLookingForGame.getRoles().get(pos);
+                if(role.isUserInList(user)){
+                    role.removeUserInList(user);
+                    role.addMin(-1);
+                }
+                else{
+                    role.addUser(user);
+                    role.addMin(1);
+                }
+                FireBaseSectionChat.getInstance().updatePosts(tempPos,homePostLookingForGame);
+                //adapter.notifyDataSetChanged();
+
+                /**
+                 * Drawable bg = btn.getBackground();
+                 *                 if(bg == R.drawable.ic_baseline_remove_24)
+                 *                 view.findViewById(R.id.remove_role_btn).setBackgroundResource(R.drawable.ic_baseline_add_circle_24);
+                 */
 
             }
+
+            @Override
+            public void onCreateCard(int position, View view) {
+                }
         });
 
 

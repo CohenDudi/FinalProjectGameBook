@@ -16,6 +16,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.finalprojectgamebook.R;
 import com.example.finalprojectgamebook.model.ChatSection;
 import com.example.finalprojectgamebook.model.ChatSectionAdapter;
@@ -26,9 +33,15 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PrivateChatFragment extends Fragment {
     private PriavteChatViewModel priavteChatViewModel;
@@ -38,6 +51,8 @@ public class PrivateChatFragment extends Fragment {
     RecyclerView recyclerView;
     ChatSectionAdapter adapter;
     FirebaseUser user;
+    FirebaseMessaging messaging = FirebaseMessaging.getInstance();
+    final String API_TOKEN_KEY = "AAAAV1YpTgI:APA91bFsz1JYI6wx0TKdJK10hsrFthaZQlwLp6uLApQF-Z_3IHmneGgEgzkCZ1QTxvjgtRhxUnSAhTogwGm4iK7ObbbprcJCl1gy7T9f5YyMJhSX--IqWkzt1ZPZ1PFt1ypwXNOhQhGX";
 
 
 
@@ -67,9 +82,11 @@ public class PrivateChatFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 priavteChatViewModel.addNewMsg(new ChatSection(user.getDisplayName(),user.getUid(),editText.getText().toString()));
+                sendNotification(friendId,editText.getText().toString());
                 editText.setText("");
                 hideSoftKeyboard(getActivity());
                 priavteChatViewModel.changeMsgSeen(friendId,0);
+
             }
         });
 
@@ -113,5 +130,48 @@ public class PrivateChatFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         priavteChatViewModel.changeMsgSeen(friendId,1);
+    }
+
+    public void sendNotification(String friendId,String text){
+        messaging.subscribeToTopic(friendId);
+        final JSONObject rootObject  = new JSONObject();
+        try{
+            rootObject.put("to", "/topics/"+friendId);
+            rootObject.put("data",new JSONObject().put("message",text));
+            String url = "https://fcm.googleapis.com/fcm/send";
+
+            RequestQueue queue = Volley.newRequestQueue(getContext());
+            StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            }) {
+
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String,String> headers = new HashMap<>();
+                    headers.put("Content-Type","application/json");
+                    headers.put("Authorization","key="+API_TOKEN_KEY);
+                    return headers;
+                }
+
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    return rootObject.toString().getBytes();
+                }
+            };
+            queue.add(request);
+            queue.start();
+
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
     }
 }
