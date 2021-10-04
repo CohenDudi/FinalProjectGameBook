@@ -23,7 +23,6 @@ public class HomePostLookingForGameAdapter extends RecyclerView.Adapter<HomePost
     private List<HomePostLookingForGame> homePostLookingForGames;
     private RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
     private Context context;
-    private String selfId;
     private User user;
 
 
@@ -37,7 +36,7 @@ public class HomePostLookingForGameAdapter extends RecyclerView.Adapter<HomePost
         void onHomePostLookingForGameAdapterClicked(int position, View view);
         void onHomePostLookingForGameAdapterLongClicked(int position, View view);
         void onHomePostLookingForGameAdapterRecyclerClicked(int position, View view);
-
+        void onClosedClicked(int position,View view);
     }
 
     private HomePostLookingForGameAdapter.HomePostLookingForGameAdapterListener listener;
@@ -52,14 +51,15 @@ public class HomePostLookingForGameAdapter extends RecyclerView.Adapter<HomePost
         TextView roles;
         TextView name;
         RecyclerView recyclerView;
+        ImageButton closeBtn;
 
         public HomePostLookingForGameViewHolder(View itemView) {
             super(itemView);
 
             description = itemView.findViewById(R.id.home_post_description);
-            //roles = itemView.findViewById(R.id.home_post_roles);
             name = itemView.findViewById(R.id.home_post_userName);
             recyclerView = itemView.findViewById(R.id.recyclerLookingForGame);
+            closeBtn = itemView.findViewById(R.id.close_home_game_btn);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -79,9 +79,15 @@ public class HomePostLookingForGameAdapter extends RecyclerView.Adapter<HomePost
             recyclerView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     listener.onHomePostLookingForGameAdapterRecyclerClicked(getAdapterPosition(),view);
 
+                }
+            });
+
+            closeBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onClosedClicked(getAdapterPosition(),v);
                 }
             });
 
@@ -109,6 +115,11 @@ public class HomePostLookingForGameAdapter extends RecyclerView.Adapter<HomePost
         holder.recyclerView.setHasFixedSize(true);
         holder.recyclerView.setAdapter(adapter);
         holder.recyclerView.setRecycledViewPool(viewPool);
+
+        if(homePostLookingForGame.getUserId().equals(FireBaseModel.getInstance().getUser().getUid()))
+            holder.closeBtn.setVisibility(View.VISIBLE);
+        else
+            holder.closeBtn.setVisibility(View.INVISIBLE);
 
 
 

@@ -14,8 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.finalprojectgamebook.R;
+import com.example.finalprojectgamebook.model.FireBaseModel;
 import com.example.finalprojectgamebook.model.Section;
 import com.example.finalprojectgamebook.model.SectionAdapter;
+import com.example.finalprojectgamebook.model.User;
 import com.example.finalprojectgamebook.viewmodel.feedViewModel;
 import com.example.finalprojectgamebook.viewmodel.gameViewModel;
 import com.google.firebase.database.DataSnapshot;
@@ -53,6 +55,16 @@ public class gameFragment extends Fragment {
 
             @Override
             public void onMissionLongClicked(int position, View view) {
+
+            }
+
+            @Override
+            public void onFavoriteClicked(int position, View view) {
+                User user = gameViewModel.getSelfUser();
+                if(!user.isFavorite(sections.get(position).getName())){
+                    user.addFavorite(sections.get(position).getName());
+                    gameViewModel.updateSelfUser(user);
+                }
 
             }
         });

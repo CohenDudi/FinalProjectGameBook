@@ -34,11 +34,13 @@
                 android:gravity="center"
                 android:id="@+id/section_name"/>
 
-            <ImageView
+            <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/favorite_star_icon"
-                android:id="@+id/section_star"/>
+                android:src="@drawable/favorite_star_icon_gray"
+                android:id="@+id/favorite_star_btn"
+                android:background="@null"
+                />
 
 
 

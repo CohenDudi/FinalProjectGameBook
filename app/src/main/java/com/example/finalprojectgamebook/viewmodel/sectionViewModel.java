@@ -71,7 +71,9 @@ public class sectionViewModel extends ViewModel {
         return fireBaseModel.getContacts();
     }
 
-
+    public void updateAllPosts(List<HomePostLookingForGame> homePostLookingForGames){
+        fireBaseSectionChat.updateAllPosts(homePostLookingForGames);
+    }
 
 
 }

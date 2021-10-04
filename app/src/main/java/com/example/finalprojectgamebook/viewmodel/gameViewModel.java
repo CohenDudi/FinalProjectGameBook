@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.finalprojectgamebook.model.FireBaseModel;
 import com.example.finalprojectgamebook.model.Section;
+import com.example.finalprojectgamebook.model.User;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
@@ -36,4 +37,12 @@ public class gameViewModel extends ViewModel {
         return fireBaseModel.getmDatabase();
     }
 
-}
+    public User getSelfUser(){
+        return fireBaseModel.getSelfUser();
+    }
+
+    public void updateSelfUser(User user) {
+        fireBaseModel.updateSelfUser(user);
+    }
+
+    }

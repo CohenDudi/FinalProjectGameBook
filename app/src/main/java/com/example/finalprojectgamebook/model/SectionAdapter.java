@@ -3,6 +3,7 @@ package com.example.finalprojectgamebook.model;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,7 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.SectionV
     public interface SectionListener {
         void onMissionClicked(int position, View view);
         void onMissionLongClicked(int position, View view);
+        void onFavoriteClicked(int position,View view);
     }
 
     private SectionListener listener;
@@ -34,14 +36,14 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.SectionV
     public class SectionViewHolder extends RecyclerView.ViewHolder {
 
         TextView name;
-        TextView type;
-        TextView description;
-
+        ImageButton favoriteBtn;
 
         public SectionViewHolder(View itemView) {
             super(itemView);
 
             name = itemView.findViewById(R.id.section_name);
+            favoriteBtn = itemView.findViewById(R.id.favorite_star_btn);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -54,6 +56,13 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.SectionV
                 public boolean onLongClick(View view) {
                     listener.onMissionLongClicked(getAdapterPosition(),view);
                     return true;
+                }
+            });
+
+            favoriteBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onFavoriteClicked(getAdapterPosition(),v);
                 }
             });
         }
@@ -72,6 +81,11 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.SectionV
 
         Section section = sections.get(position);
         holder.name.setText(section.getName());
+        if(FireBaseModel.getInstance().getSelfUser().isFavorite(section.getName()))
+            holder.favoriteBtn.setImageResource(R.drawable.favorite_star_icon);
+        else
+            holder.favoriteBtn.setImageResource(R.drawable.favorite_star_icon_gray);
+
     }
 
     @Override

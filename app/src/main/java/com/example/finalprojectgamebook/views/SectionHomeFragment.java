@@ -145,6 +145,12 @@ public class SectionHomeFragment extends Fragment {
             public void onHomePostLookingForGameAdapterRecyclerClicked(int position, View view) {
 
             }
+
+            @Override
+            public void onClosedClicked(int position, View view) {
+                homePostLookingForGames.remove(position);
+                sectionViewModel.updateAllPosts(homePostLookingForGames);
+            }
         });
         updatePosts();
 

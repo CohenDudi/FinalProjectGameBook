@@ -29,6 +29,7 @@ public class FireBaseModel {
     private FirebaseAuth firebaseAuth;
     private MutableLiveData<FirebaseUser> userMutableLiveData;
     private DatabaseReference mDatabase;
+    private User selfUser;
     List<Section> sections = new ArrayList<>();
     List<User> usersFriend = new ArrayList<>();
     List<User> users = new ArrayList<>();
@@ -39,6 +40,7 @@ public class FireBaseModel {
         userMutableLiveData = new MutableLiveData<>();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         readSections();
+        readSelfUser();
         //readContacts();
     }
 
@@ -62,8 +64,9 @@ public class FireBaseModel {
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(application.getMainExecutor(), new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful())
+                if(task.isSuccessful()) {
                     userMutableLiveData.postValue(firebaseAuth.getCurrentUser());
+                }
                 else
                     Toast.makeText(application,"register failed"+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
             }
@@ -125,7 +128,34 @@ public class FireBaseModel {
         mDatabase.child("contact").child(friendUserId).setValue(usersFriend);
     }
 
+    public void updateSelfUser(User user){
+        mDatabase.child("users").child(getUser().getUid()).setValue(user);
+    }
 
+    public void readSelfUser(){
+        if(getUser()!=null)
+        mDatabase.child("users").child(getUser().getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                selfUser = null;
+                if(dataSnapshot.exists()) {
+                    selfUser = dataSnapshot.getValue(User.class);
+                    //for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    //    selfUser = snapshot.getValue(User.class);
+                    //}
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public User getSelfUser(){
+        return selfUser;
+    }
 
     public void readSections(){
 

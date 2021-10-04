@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import com.example.finalprojectgamebook.R;
 import com.example.finalprojectgamebook.model.FireBaseModel;
+import com.example.finalprojectgamebook.model.User;
 import com.example.finalprojectgamebook.viewmodel.LoginRegisterViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -173,6 +174,9 @@ public class MainActivity extends AppCompatActivity {
                     if(fullName != null)
                     {
                         loginRegisterViewModel.updateName(fullName);
+                        User newUser = new User(fullName, fireBase.getUser().getUid());
+                        fireBase.updateSelfUser(newUser);
+                        fireBase.readSelfUser();
                         fullName = null;
                     }
 
