@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.example.finalprojectgamebook.R;
 import com.example.finalprojectgamebook.model.FireBaseModel;
+import com.example.finalprojectgamebook.model.FireBaseSectionChat;
 import com.example.finalprojectgamebook.model.Section;
 import com.example.finalprojectgamebook.model.SectionAdapter;
 import com.example.finalprojectgamebook.model.User;
@@ -60,12 +61,20 @@ public class gameFragment extends Fragment {
 
             @Override
             public void onFavoriteClicked(int position, View view) {
-                User user = gameViewModel.getSelfUser();
+                List<String> usersIds = sections.get(position).getUsersId();
+                String selfId = FireBaseModel.getInstance().getUser().getUid();
+                /**User user = gameViewModel.getSelfUser();
                 if(!user.isFavorite(sections.get(position).getName())){
                     user.addFavorite(sections.get(position).getName());
                     gameViewModel.updateSelfUser(user);
                 }
-
+                 **/
+                if(usersIds.contains(selfId)){
+                    usersIds.remove(selfId);
+                }else{
+                    usersIds.add(selfId);
+                }
+                FireBaseModel.getInstance().updateSection(sections.get(position),position);
             }
         });
         updateFeed();
@@ -76,7 +85,7 @@ public class gameFragment extends Fragment {
         gameViewModel.getFireBase().child("section").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                sections = gameViewModel.getSections();
+                //sections = gameViewModel.getSections();
                 adapter.notifyDataSetChanged();
             }
 

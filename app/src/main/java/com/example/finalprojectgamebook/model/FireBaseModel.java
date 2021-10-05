@@ -33,6 +33,8 @@ public class FireBaseModel {
     List<Section> sections = new ArrayList<>();
     List<User> usersFriend = new ArrayList<>();
     List<User> users = new ArrayList<>();
+    ArrayList<ArrayList<HomePostLookingForGame>> feedPosts = new ArrayList<ArrayList<HomePostLookingForGame>>();
+    //List<HomePostLookingForGame> feedPosts = new ArrayList<>();
 
 
     private FireBaseModel(){
@@ -40,7 +42,8 @@ public class FireBaseModel {
         userMutableLiveData = new MutableLiveData<>();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         readSections();
-        readSelfUser();
+        //readAllPosts();
+        //readSelfUser();
         //readContacts();
     }
 
@@ -118,6 +121,11 @@ public class FireBaseModel {
         mDatabase.child("section").setValue(sections);
     }
 
+    public void updateSection(Section section,int position){
+            mDatabase.child("section").child(String.valueOf(position)).setValue(section);
+
+    }
+
     public void addNewContact(User user){
         users.add(user);
         mDatabase.child("contact").child(getUser().getUid()).setValue(users);
@@ -167,16 +175,54 @@ public class FireBaseModel {
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Section section = snapshot.getValue(Section.class);
                         sections.add(section);
+                        readAllPosts();
                     }
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
+        //readAllPosts();
+    }
 
+    public void readAllPosts(){
+        int i = 0;
+        for (Section section :sections) {
+            feedPosts.add(new ArrayList<HomePostLookingForGame>());
+            int finalI = i;
+            mDatabase.child("section feed").child(section.getName()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    feedPosts.get(finalI).clear();
+                    if(dataSnapshot.exists()) {
+                        for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            HomePostLookingForGame h = snapshot.getValue(HomePostLookingForGame.class);
+                            feedPosts.get(finalI).add(h);
+                        }
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+            i++;
+        }
+    }
+
+    public List<HomePostLookingForGame> getAllPosts(){
+
+        List<HomePostLookingForGame> temp = new ArrayList<>();
+        for (List<HomePostLookingForGame> f:feedPosts) {
+            for (HomePostLookingForGame h:f) {
+                temp.add(h);
+            }
+        }
+
+        return temp;
     }
 
     public void readContacts(){

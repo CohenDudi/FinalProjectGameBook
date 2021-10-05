@@ -76,6 +76,8 @@ public class FireBaseSectionChat {
         mDatabase.child("section feed").child(section.getName()).child(String.valueOf(pos)).setValue(homePostLookingForGame);
     }
 
+
+
     public void updateAllPosts(List<HomePostLookingForGame> homePostLookingForGames){
         mDatabase.child("section feed").child(section.getName()).setValue(homePostLookingForGames);
     }

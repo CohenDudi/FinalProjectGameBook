@@ -12,16 +12,18 @@ public class Section implements Serializable {
     private String name;
     private String type;
     private String description;
-    private Set<String> usersId;
+    private List<String> usersId;
     private String img;
 
-    public Section(){}
+    public Section(){
+        this.usersId = new ArrayList<>();
+    }
 
     public Section(String name,String type,String description,String img){
         this.name = name;
         this.type = type;
         this.description = description;
-        this.usersId = new HashSet<>();
+        this.usersId = new ArrayList<>();
         this.img = img;
     }
 
@@ -39,6 +41,10 @@ public class Section implements Serializable {
 
     public void addUserId(String s){
         usersId.add(s);
+    }
+
+    public List<String> getUsersId() {
+        return usersId;
     }
 
     public String getImg() {
