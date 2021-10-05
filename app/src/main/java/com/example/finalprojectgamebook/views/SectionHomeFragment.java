@@ -123,8 +123,8 @@ public class SectionHomeFragment extends Fragment {
     public void recyclerHome(){
         FirebaseUser u = FireBaseModel.getInstance().getUser();
         User user = new User(u.getDisplayName(),u.getUid());
-
         RecyclerView recyclerViewHome = root.findViewById(R.id.recyclerSectionHome);
+
         adapterHome = new HomePostLookingForGameAdapter(homePostLookingForGames,getContext(),user);
         recyclerViewHome.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewHome.setHasFixedSize(true);

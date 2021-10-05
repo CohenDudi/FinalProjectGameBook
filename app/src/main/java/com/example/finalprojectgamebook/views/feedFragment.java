@@ -1,10 +1,12 @@
 package com.example.finalprojectgamebook.views;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,6 +39,7 @@ public class feedFragment extends Fragment {
     List<HomePostLookingForGame> feedPosts = new ArrayList<>();
     HomePostLookingForGameAdapter adapter;
     User user;
+    ValueEventListener eventUpdatePosts;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,16 +47,20 @@ public class feedFragment extends Fragment {
         //FireBaseModel.getInstance().readAllPosts();
     }
 
+
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         feedViewModel = new ViewModelProvider(this).get(feedViewModel.class);
         View root = inflater.inflate(R.layout.fragment_feed, container, false);
-
         user = new User(FireBaseModel.getInstance().getUser().getDisplayName(),FireBaseModel.getInstance().getUser().getUid());
-        //FireBaseModel.getInstance().readAllPosts();
-        RecyclerView recyclerView = root.findViewById(R.id.recyclerFeed);
+
         feedPosts = FireBaseModel.getInstance().getAllPosts();
+
+        RecyclerView recyclerView = root.findViewById(R.id.recyclerFeed);
+        //feedPosts = FireBaseModel.getInstance().getAllPosts();
+
         adapter = new HomePostLookingForGameAdapter(feedPosts,getContext(),user);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
 
@@ -78,25 +85,39 @@ public class feedFragment extends Fragment {
 
             }
         });
-        updatePosts();
 
+        updatePosts();
         return root;
     }
 
     public void updatePosts(){
-            FireBaseModel.getInstance().getmDatabase().child("section feed").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    //feedPosts = FireBaseModel.getInstance().getAllPosts();
-                    adapter.notifyDataSetChanged();
-                    }
+        eventUpdatePosts = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                feedPosts.clear();
+                feedPosts.addAll(FireBaseModel.getInstance().getAllPosts());
+                adapter.notifyDataSetChanged();
+            }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-                }
-            });
+            }
+        };
+            FireBaseModel.getInstance().getmDatabase().child("section feed").addValueEventListener(eventUpdatePosts);
         }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        FireBaseModel.getInstance().getmDatabase().child("section feed").removeEventListener(eventUpdatePosts);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        FireBaseModel.getInstance().getmDatabase().child("section feed").removeEventListener(eventUpdatePosts);
+
+    }
 
 }

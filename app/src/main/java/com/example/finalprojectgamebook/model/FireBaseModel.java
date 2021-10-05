@@ -18,9 +18,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class FireBaseModel {
@@ -34,6 +36,7 @@ public class FireBaseModel {
     List<User> usersFriend = new ArrayList<>();
     List<User> users = new ArrayList<>();
     ArrayList<ArrayList<HomePostLookingForGame>> feedPosts = new ArrayList<ArrayList<HomePostLookingForGame>>();
+
     //List<HomePostLookingForGame> feedPosts = new ArrayList<>();
 
 
@@ -42,7 +45,7 @@ public class FireBaseModel {
         userMutableLiveData = new MutableLiveData<>();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         readSections();
-        //readAllPosts();
+        readAllPosts();
         //readSelfUser();
         //readContacts();
     }
@@ -175,7 +178,6 @@ public class FireBaseModel {
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Section section = snapshot.getValue(Section.class);
                         sections.add(section);
-                        readAllPosts();
                     }
                 }
             }
@@ -187,6 +189,7 @@ public class FireBaseModel {
     }
 
     public void readAllPosts(){
+        /**
         int i = 0;
         for (Section section :sections) {
             feedPosts.add(new ArrayList<HomePostLookingForGame>());
@@ -209,8 +212,36 @@ public class FireBaseModel {
 
                 }
             });
-            i++;
+
+            //i++;
+
         }
+         **/
+        mDatabase.child("section feed").addValueEventListener(new ValueEventListener() {
+            int i = 0;
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                feedPosts.clear();
+                Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+                int length = (int) dataSnapshot.getChildrenCount();
+                //String[] sampleString = new String[length];
+                while(i < length) {
+                    //sampleString[i] = iterator.next().getValue().toString();
+                    GenericTypeIndicator<ArrayList<HomePostLookingForGame>> t = new GenericTypeIndicator<ArrayList<HomePostLookingForGame>>() {};
+                    feedPosts.add(iterator.next().getValue(t));
+                    //Log.d(Integer.toString(i), sampleString[i]);
+                    i++;
+
+                }
+                i = 0;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     public List<HomePostLookingForGame> getAllPosts(){
