@@ -1,22 +1,25 @@
 package com.example.finalprojectgamebook.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomePostLookingForGame  {
+public class HomePostLookingForGame {
     List<Role> roles = new ArrayList();
     String UserName;
     String UserId;
     String description;
+    String gameName;
 
 
     public HomePostLookingForGame(){};
 
-    public HomePostLookingForGame(List<Role> roles, String userName, String userId,String description) {
+    public HomePostLookingForGame(List<Role> roles, String userName, String userId,String description,String gameName) {
         this.roles = roles;
         UserName = userName;
         UserId = userId;
         this.description = description;
+        this.gameName = gameName;
     }
 
     public String getDescription() {
@@ -51,6 +54,10 @@ public class HomePostLookingForGame  {
 
     public void setUserId(String userId) {
         UserId = userId;
+    }
+
+    public String getGameName() {
+        return gameName;
     }
 
 

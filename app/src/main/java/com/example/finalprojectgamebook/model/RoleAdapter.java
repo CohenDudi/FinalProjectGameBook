@@ -24,15 +24,17 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.RoleViewHolder
     private Context context;
     private String originalPoster;
     int adapterPosition;
+    String gameName;
 
 
-    public RoleAdapter(List<Role> roles,int flag,Context context,String originalPoster,int adapterPosition) {
+    public RoleAdapter(List<Role> roles,int flag,Context context,String originalPoster,int adapterPosition,String gameName) {
 
         this.roles = roles;
         this.flag = flag;
         this.context = context;
         this.originalPoster = originalPoster;
         this.adapterPosition = adapterPosition;
+        this.gameName = gameName;
     }
 
     public interface RoleListener {
@@ -153,7 +155,7 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.RoleViewHolder
                 public void onRemoveClicked(int position, View view) {
                     role.getUsers().remove(position);
                     role.addMin(-1);
-                    FireBaseSectionChat.getInstance().updatePost(adapterPosition,tempPos,role);
+                    FireBaseSectionChat.getInstance().updatePost(adapterPosition,tempPos,role,gameName);
 
 
                 }
@@ -163,6 +165,10 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.RoleViewHolder
                 holder.remove.setVisibility(View.INVISIBLE);
             }else{
                 holder.remove.setVisibility(View.VISIBLE);
+            }
+            if(role.getMax()==role.getMin()){
+                holder.remove.setVisibility(View.VISIBLE);
+                holder.remove.setBackgroundResource(R.drawable.ic_baseline_timelapse_24);
             }
 
         }

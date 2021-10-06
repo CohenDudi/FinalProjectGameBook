@@ -125,7 +125,7 @@ public class SectionHomeFragment extends Fragment {
         User user = new User(u.getDisplayName(),u.getUid());
         RecyclerView recyclerViewHome = root.findViewById(R.id.recyclerSectionHome);
 
-        adapterHome = new HomePostLookingForGameAdapter(homePostLookingForGames,getContext(),user);
+        adapterHome = new HomePostLookingForGameAdapter(homePostLookingForGames,getContext(),user,0);
         recyclerViewHome.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewHome.setHasFixedSize(true);
         recyclerViewHome.setAdapter(adapterHome);
@@ -196,7 +196,7 @@ public class SectionHomeFragment extends Fragment {
         validInput = view.findViewById(R.id.input_text_invalid);
         recyclerView = view.findViewById(R.id.recyclerSectionHomeDialog);
 
-        RoleAdapter adapter = new RoleAdapter(roles,0,getContext(),"",0);
+        RoleAdapter adapter = new RoleAdapter(roles,0,getContext(),"",0,"");
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
@@ -259,7 +259,9 @@ public class SectionHomeFragment extends Fragment {
         view.findViewById(R.id.submit_add_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sectionViewModel.addNewPost(new HomePostLookingForGame(roles,sectionViewModel.getUser().getDisplayName(),sectionViewModel.getUser().getUid(),description.getText().toString()));
+                //sectionViewModel.addNewPost(new HomePostLookingForGame(roles,sectionViewModel.getUser().getDisplayName(),sectionViewModel.getUser().getUid(),description.getText().toString(),section.getName()));
+                HomePostLookingForGame h = new HomePostLookingForGame(roles,sectionViewModel.getUser().getDisplayName(),sectionViewModel.getUser().getUid(),description.getText().toString(),section.getName());
+                sectionViewModel.addNewPost(h);
                 alertDialog.dismiss();
             }
         });

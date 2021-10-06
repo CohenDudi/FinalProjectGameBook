@@ -67,13 +67,13 @@ public class FireBaseSectionChat {
         mDatabase.child("section feed").child(section.getName()).setValue(homePostLookingForGames);
     }
 
-    public void updatePost(int positionSection , int positionRole , Role role){
-        Role r = homePostLookingForGames.get(positionSection).getRoles().get(positionRole);
-        mDatabase.child("section feed").child(section.getName()).child(String.valueOf(positionSection)).child("roles").child(String.valueOf(positionRole)).setValue(r);
+    public void updatePost(int positionSection , int positionRole , Role role,String gameName){
+        //Role r = homePostLookingForGames.get(positionSection).getRoles().get(positionRole);
+        mDatabase.child("section feed").child(gameName).child(String.valueOf(positionSection)).child("roles").child(String.valueOf(positionRole)).setValue(role);
     }
 
     public void updatePosts(int pos ,HomePostLookingForGame homePostLookingForGame){
-        mDatabase.child("section feed").child(section.getName()).child(String.valueOf(pos)).setValue(homePostLookingForGame);
+        mDatabase.child("section feed").child(homePostLookingForGame.getGameName()).child(String.valueOf(pos)).setValue(homePostLookingForGame);
     }
 
 

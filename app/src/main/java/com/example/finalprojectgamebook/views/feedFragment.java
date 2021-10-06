@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.example.finalprojectgamebook.R;
 import com.example.finalprojectgamebook.model.FireBaseModel;
+import com.example.finalprojectgamebook.model.FireBaseSectionChat;
 import com.example.finalprojectgamebook.model.HomePostLookingForGame;
 import com.example.finalprojectgamebook.model.HomePostLookingForGameAdapter;
 import com.example.finalprojectgamebook.model.Section;
@@ -53,13 +54,13 @@ public class feedFragment extends Fragment {
         feedViewModel = new ViewModelProvider(this).get(feedViewModel.class);
         View root = inflater.inflate(R.layout.fragment_feed, container, false);
         user = new User(FireBaseModel.getInstance().getUser().getDisplayName(),FireBaseModel.getInstance().getUser().getUid());
-
+        //user = new User(" "," ");
         feedPosts = FireBaseModel.getInstance().getAllPosts();
 
         RecyclerView recyclerView = root.findViewById(R.id.recyclerFeed);
         //feedPosts = FireBaseModel.getInstance().getAllPosts();
 
-        adapter = new HomePostLookingForGameAdapter(feedPosts,getContext(),user);
+        adapter = new HomePostLookingForGameAdapter(feedPosts,getContext(),user,1);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);

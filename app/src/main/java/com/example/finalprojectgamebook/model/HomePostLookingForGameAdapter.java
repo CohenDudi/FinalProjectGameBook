@@ -24,12 +24,14 @@ public class HomePostLookingForGameAdapter extends RecyclerView.Adapter<HomePost
     private RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
     private Context context;
     private User user;
+    private int flagIsFeed;
 
 
-    public HomePostLookingForGameAdapter(List<HomePostLookingForGame> homePostLookingForGames, Context context, User user) {
+    public HomePostLookingForGameAdapter(List<HomePostLookingForGame> homePostLookingForGames, Context context, User user,int isFeed) {
         this.homePostLookingForGames = homePostLookingForGames;
         this.context = context;
         this.user = user;
+        this.flagIsFeed = isFeed;
     }
 
     public interface HomePostLookingForGameAdapterListener {
@@ -110,16 +112,16 @@ public class HomePostLookingForGameAdapter extends RecyclerView.Adapter<HomePost
         holder.description.setText(homePostLookingForGame.getDescription());
         holder.name.setText(homePostLookingForGame.getUserName());
         int tempPosition = position;
-        RoleAdapter adapter = new RoleAdapter(homePostLookingForGame.getRoles(),1,context,homePostLookingForGame.getUserId(),position);
+        RoleAdapter adapter = new RoleAdapter(homePostLookingForGame.getRoles(),1,context,homePostLookingForGame.getUserId(),position, homePostLookingForGame.getGameName());
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(context));
         holder.recyclerView.setHasFixedSize(true);
         holder.recyclerView.setAdapter(adapter);
         holder.recyclerView.setRecycledViewPool(viewPool);
 
-        if(homePostLookingForGame.getUserId().equals(FireBaseModel.getInstance().getUser().getUid()))
-            holder.closeBtn.setVisibility(View.VISIBLE);
-        else
+        if(!homePostLookingForGame.getUserId().equals(FireBaseModel.getInstance().getUser().getUid()) || flagIsFeed == 1)
             holder.closeBtn.setVisibility(View.INVISIBLE);
+        else
+            holder.closeBtn.setVisibility(View.VISIBLE);
 
 
 
@@ -144,8 +146,10 @@ public class HomePostLookingForGameAdapter extends RecyclerView.Adapter<HomePost
                     role.addMin(-1);
                 }
                 else{
-                    role.addUser(user);
-                    role.addMin(1);
+                    if(role.getMin()!=role.getMax()) {
+                        role.addUser(user);
+                        role.addMin(1);
+                    }
                 }
                 FireBaseSectionChat.getInstance().updatePosts(tempPos,homePostLookingForGame);
                 //adapter.notifyDataSetChanged();
