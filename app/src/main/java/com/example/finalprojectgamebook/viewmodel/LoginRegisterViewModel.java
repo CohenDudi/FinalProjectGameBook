@@ -28,6 +28,10 @@ public class LoginRegisterViewModel extends AndroidViewModel {
         fireBase.register(email, password);
     }
 
+    public void anonymousRegister(String email,String password){fireBase.registerAnonymous(email, password);}
+
+    public void signInAnonymously(){fireBase.signInAnonymously();}
+
     public void updateName(String fullName){fireBase.updateName(fullName);}
 
     public void login(String email, String password){

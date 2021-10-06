@@ -67,11 +67,14 @@ public class MainActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.navigation_view);
         coordinatorLayout = findViewById(R.id.coordinator);
 
-
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        View headerView  = navigationView.getHeaderView(0);
+        TextView userTv = headerView.findViewById(R.id.navigation_header_text_view);
+
+        if(loginRegisterViewModel.getUser().isAnonymous())
+            userTv.setText("Welcome Guest");
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         if(loginRegisterViewModel.getUser()!=null) {
@@ -94,12 +97,6 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
 
                     case R.id.item_sign_up:
-                        /**
-                        String username  = usernameEt.getText().toString();
-                        fullName = fullnameEt.getText().toString();
-                        String password = passwordEt.getText().toString();
-                        dialogView.findViewById(R.id.sign_in_up).setOnClickListener(v -> loginRegisterViewModel.register(username,password));
-                         **/
                         alertDialog.show();
                         dialogView.findViewById(R.id.sign_in_up).setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -107,7 +104,14 @@ public class MainActivity extends AppCompatActivity {
                                 String username  = usernameEt.getText().toString();
                                 fullName = fullnameEt.getText().toString();
                                 String password = passwordEt.getText().toString();
-                                loginRegisterViewModel.register(username,password);
+                                //loginRegisterViewModel.register(username,password);
+                                loginRegisterViewModel.anonymousRegister(username,password);
+                                loginRegisterViewModel.updateName(fullName);
+
+                                userTv.setText("Welcome " + fullName);
+                                toolbar.setTitle("Welcome " + fullName);
+                                fullName = null;
+
                                 alertDialog.dismiss();
                             }
                         });
@@ -118,16 +122,6 @@ public class MainActivity extends AppCompatActivity {
                                 alertDialog.dismiss();
                             }
                         });
-                        /**
-                        builder.setView(dialogView).setPositiveButton("Register", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                                //sign up the user
-                                loginRegisterViewModel.register(username,password);
-                            }
-                        }).show();
-                         **/
 
                         break;
                     case R.id.item_sign_in:
@@ -136,9 +130,12 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 String username  = usernameEt.getText().toString();
-                                fullName = fullnameEt.getText().toString();
                                 String password = passwordEt.getText().toString();
                                 loginRegisterViewModel.login(username,password);
+
+                                userTv.setText("Welcome "+ loginRegisterViewModel.getUser().getDisplayName());
+                                toolbar.setTitle("Welcome "+ loginRegisterViewModel.getUser().getDisplayName());
+
                                 alertDialog.dismiss();
                             }
                         });
@@ -152,15 +149,14 @@ public class MainActivity extends AppCompatActivity {
 
                         break;
                     case R.id.item_sign_out:
-                        loginRegisterViewModel.signOut();
+                        //loginRegisterViewModel.signOut();
+                        loginRegisterViewModel.signInAnonymously();
                         break;
                 }
                 return false;
             }
         });
-        //final CollapsingToolbarLayout collapsing  = findViewById(R.id.collapsing_layout);
-        toolbar.setTitle("Please log in");
-        //collapsing.setTitle("Please log in");
+
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -168,36 +164,31 @@ public class MainActivity extends AppCompatActivity {
                 View headerView  = navigationView.getHeaderView(0);
                 TextView userTv = headerView.findViewById(R.id.navigation_header_text_view);
 
-                final FirebaseUser user = loginRegisterViewModel.getUser();
+                FirebaseUser user = loginRegisterViewModel.getUser();
+                /**
+                if(user == null){
+                    loginRegisterViewModel.signInAnonymously();
+                    user = loginRegisterViewModel.getUser();
+                }
+                 **/
+                    if(user.isAnonymous()){
+                        userTv.setText("Please Login");
+                        toolbar.setTitle("Hello Guest");
+                    }else{
+                        userTv.setText("Welcome " + user.getDisplayName());
+                        toolbar.setTitle("Welcome " + user.getDisplayName());
 
-                if(user != null) {//sign up or sign in
-                    if(fullName != null)
-                    {
-                        loginRegisterViewModel.updateName(fullName);
-                        User newUser = new User(fullName, fireBase.getUser().getUid());
-                        fireBase.updateSelfUser(newUser);
-                        fireBase.readSelfUser();
-                        fullName = null;
+                    }
+                    if(FireBaseModel.getInstance().getUser().isAnonymous()){
+                        navigationView.getMenu().findItem(R.id.item_sign_in).setVisible(true);
+                        navigationView.getMenu().findItem(R.id.item_sign_up).setVisible(true);
+                        navigationView.getMenu().findItem(R.id.item_sign_out).setVisible(false);
+                    }else{
+                        navigationView.getMenu().findItem(R.id.item_sign_in).setVisible(false);
+                        navigationView.getMenu().findItem(R.id.item_sign_up).setVisible(false);
+                        navigationView.getMenu().findItem(R.id.item_sign_out).setVisible(true);
                     }
 
-                    userTv.setText(user.getDisplayName() + " logged in");
-                    toolbar.setTitle(user.getDisplayName());
-
-                    navigationView.getMenu().findItem(R.id.item_sign_in).setVisible(false);
-                    navigationView.getMenu().findItem(R.id.item_sign_up).setVisible(false);
-                    navigationView.getMenu().findItem(R.id.item_sign_out).setVisible(true);
-                    loginRegisterViewModel.reloadContactAndSection();
-                    //Read the user data base - missions
-
-                }
-                else {
-                    userTv.setText("Please log in");
-                    toolbar.setTitle("Please log in");
-
-                    navigationView.getMenu().findItem(R.id.item_sign_in).setVisible(true);
-                    navigationView.getMenu().findItem(R.id.item_sign_up).setVisible(true);
-                    navigationView.getMenu().findItem(R.id.item_sign_out).setVisible(false);
-                }
             }
         };
         createBottomNav();

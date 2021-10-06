@@ -75,6 +75,10 @@ public class sectionViewModel extends ViewModel {
         fireBaseSectionChat.updateAllPosts(homePostLookingForGames);
     }
 
+    public Boolean isAnonymous(){
+        return fireBaseModel.getUser().isAnonymous();
+    }
+
 
 
 }

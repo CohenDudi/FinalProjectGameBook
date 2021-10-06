@@ -53,8 +53,11 @@ public class feedFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         feedViewModel = new ViewModelProvider(this).get(feedViewModel.class);
         View root = inflater.inflate(R.layout.fragment_feed, container, false);
-        user = new User(FireBaseModel.getInstance().getUser().getDisplayName(),FireBaseModel.getInstance().getUser().getUid());
-        //user = new User(" "," ");
+        if(!feedViewModel.isAnonymous())
+            user = new User(FireBaseModel.getInstance().getUser().getDisplayName(),FireBaseModel.getInstance().getUser().getUid());
+        else{
+            user = new User("Anonymous",FireBaseModel.getInstance().getUser().getUid());
+        }
         feedPosts = FireBaseModel.getInstance().getAllPosts();
 
         RecyclerView recyclerView = root.findViewById(R.id.recyclerFeed);

@@ -27,4 +27,8 @@ public class feedViewModel extends ViewModel {
         return mText;
     }
 
+    public boolean isAnonymous(){
+        return fireBaseModel.getUser().isAnonymous();
+    }
+
 }

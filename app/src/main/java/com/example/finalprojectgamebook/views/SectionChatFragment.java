@@ -3,6 +3,7 @@ package com.example.finalprojectgamebook.views;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -62,18 +63,19 @@ public class SectionChatFragment extends Fragment {
                              Bundle savedInstanceState) {
         sectionViewModel = new ViewModelProvider(requireActivity()).get(sectionViewModel.class);
         View root = inflater.inflate(R.layout.fragment_section_chat, container, false);
-        //LiveData<Section> section = sectionViewModel.getSection();
-        //fireBaseSectionChat = new FireBaseSectionChat(getActivity().getApplication(), )
         section = sectionViewModel.getSection();
         chats = sectionViewModel.getChats();
-
-        //chats.add(new ChatSection(section.getName(),"1","hello"));
-        //chats.add(new ChatSection("sagi","2","world"));
-       //sectionViewModel.addNewMsg(new ChatSection("dudi","1","hello"));
 
         recyclerView = root.findViewById(R.id.recyclerChat);
         EditText editText = root.findViewById(R.id.msg_input_chat);
         ImageButton imageButton = root.findViewById(R.id.msg_btn_chat);
+
+        if(sectionViewModel.isAnonymous()){
+            editText.setEnabled(false);
+            editText.setText("Please Login");
+            editText.setTextColor(Color.RED);
+            imageButton.setEnabled(false);
+        }
 
         adapter = new ChatSectionAdapter(chats);
         adapter.setUserId(sectionViewModel.getUser().getUid());
@@ -160,6 +162,7 @@ public class SectionChatFragment extends Fragment {
         Button add_friend_btn = view.findViewById(R.id.add_to_friend_btn);
         TextView friendName = view.findViewById(R.id.friend_name_txt);
 
+
         friendName.setText(chats.get(position).getName());
 
         if(ifFriends[0] || chats.get(position).getUserId().equals(sectionViewModel.getUser().getUid())){
@@ -187,6 +190,14 @@ public class SectionChatFragment extends Fragment {
 
             }
         });
+
+        if(sectionViewModel.isAnonymous())
+        {
+            add_friend_btn.setEnabled(false);
+            add_friend_btn.setText("Please Login");
+
+        }
+
 
 
     }

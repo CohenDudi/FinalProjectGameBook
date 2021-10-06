@@ -7,10 +7,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.finalprojectgamebook.views.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -46,6 +49,7 @@ public class FireBaseModel {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         readSections();
         readAllPosts();
+
         //readSelfUser();
         //readContacts();
     }
@@ -81,6 +85,38 @@ public class FireBaseModel {
 
     }
 
+    public void registerAnonymous(String email,String password){
+        AuthCredential credential = EmailAuthProvider.getCredential(email, password);
+        firebaseAuth.getCurrentUser().linkWithCredential(credential).addOnCompleteListener(application.getMainExecutor(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            //FirebaseUser user = task.getResult().getUser();
+                            //updateUI(user);
+                        } else {
+                            //Log.w(TAG, "linkWithCredential:failure", task.getException());
+                            Toast.makeText(application, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+    }
+
+    public void signInAnonymously(){
+        firebaseAuth.signInAnonymously()
+                .addOnCompleteListener(application.getMainExecutor(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                        } else {
+                            // If sign in fails, display a message to the user.
+                        }
+                    }
+                });
+
+    }
+
     public void updateName(String fullName){
             if(fullName != null){
                 getUser().updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(fullName).build()).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -104,6 +140,8 @@ public class FireBaseModel {
             }
         });
     }
+
+
 
     public MutableLiveData<FirebaseUser> getUserMutableLiveData() {
         return userMutableLiveData;
@@ -189,34 +227,6 @@ public class FireBaseModel {
     }
 
     public void readAllPosts(){
-        /**
-        int i = 0;
-        for (Section section :sections) {
-            feedPosts.add(new ArrayList<HomePostLookingForGame>());
-            int finalI = i;
-            mDatabase.child("section feed").child(section.getName()).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    feedPosts.get(finalI).clear();
-                    if(dataSnapshot.exists()) {
-                        for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            HomePostLookingForGame h = snapshot.getValue(HomePostLookingForGame.class);
-                            feedPosts.get(finalI).add(h);
-                        }
-                    }
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-
-            //i++;
-
-        }
-         **/
         mDatabase.child("section feed").addValueEventListener(new ValueEventListener() {
             int i = 0;
             @Override
@@ -257,7 +267,7 @@ public class FireBaseModel {
     }
 
     public void readContacts(){
-        if(getUser() != null)
+        if(!getUser().isAnonymous())
          {
             mDatabase.child("contact").child(getUser().getUid()).addValueEventListener(new ValueEventListener() {
                 @Override

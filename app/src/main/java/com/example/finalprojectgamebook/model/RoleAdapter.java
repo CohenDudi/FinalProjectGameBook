@@ -127,7 +127,14 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.RoleViewHolder
         }
          **/
         FirebaseUser u = FireBaseModel.getInstance().getUser();
-        User user = new User(u.getDisplayName(),u.getUid());
+        User user;
+        if(!u.isAnonymous()){
+            user = new User(u.getDisplayName(),u.getUid());
+        }
+        else{
+            user = new User("Anonymous", u.getUid());
+        }
+
         if(role.isUserInList(user) || flag ==0){
             holder.remove.setBackgroundResource(R.drawable.ic_baseline_remove_24);
         }else{
@@ -161,16 +168,11 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.RoleViewHolder
                 }
             });
 
-            if(FireBaseModel.getInstance().getUser().getUid().equals(originalPoster)){
+            if(FireBaseModel.getInstance().getUser().isAnonymous() || FireBaseModel.getInstance().getUser().getUid().equals(originalPoster)){
                 holder.remove.setVisibility(View.INVISIBLE);
             }else{
                 holder.remove.setVisibility(View.VISIBLE);
             }
-            if(role.getMax()==role.getMin()){
-                holder.remove.setVisibility(View.VISIBLE);
-                holder.remove.setBackgroundResource(R.drawable.ic_baseline_timelapse_24);
-            }
-
         }
 
         //holder.name.setText(role.getName());
