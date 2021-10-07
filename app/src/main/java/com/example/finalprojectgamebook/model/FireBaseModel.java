@@ -71,7 +71,7 @@ public class FireBaseModel {
 
 
     public void register(String email, String password){
-        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(application.getMainExecutor(), new OnCompleteListener<AuthResult>() {
+        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()) {
@@ -81,13 +81,11 @@ public class FireBaseModel {
                     Toast.makeText(application,"register failed"+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
-
     }
 
     public void registerAnonymous(String email,String password){
         AuthCredential credential = EmailAuthProvider.getCredential(email, password);
-        firebaseAuth.getCurrentUser().linkWithCredential(credential).addOnCompleteListener(application.getMainExecutor(), new OnCompleteListener<AuthResult>() {
+        firebaseAuth.getCurrentUser().linkWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
@@ -102,18 +100,32 @@ public class FireBaseModel {
 
     }
 
+    public FirebaseAuth getFirebaseAuth(){
+        return firebaseAuth;
+    }
+
     public void signInAnonymously(){
-        firebaseAuth.signInAnonymously()
-                .addOnCompleteListener(application.getMainExecutor(), new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                        } else {
-                            // If sign in fails, display a message to the user.
+        if(getUser()==null)
+            firebaseAuth.signInAnonymously()
+                    .addOnCompleteListener(application.getMainExecutor(),new OnCompleteListener<AuthResult>()
+                    {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task)
+                        {
+                            Log.d("FirebaseAuth", "signInAnonymously:onComplete:" + task.isSuccessful());
+
+                            if (!task.isSuccessful())
+                            {
+                                Log.w("FirebaseAuth", "signInAnonymously", task.getException());
+                                Toast.makeText(application.getApplicationContext(), "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                            // ...
                         }
-                    }
-                });
+                    });
+        else
+            getUser().reload();
+
 
     }
 

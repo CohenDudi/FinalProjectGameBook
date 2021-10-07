@@ -19,12 +19,14 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.finalprojectgamebook.R;
 import com.example.finalprojectgamebook.model.FireBaseModel;
@@ -47,39 +49,45 @@ public class MainActivity extends AppCompatActivity {
     NavigationView navigationView;
     CoordinatorLayout coordinatorLayout;
     String fullName;
-
     FireBaseModel fireBase;
     FirebaseAuth.AuthStateListener authStateListener;
     LoginRegisterViewModel loginRegisterViewModel;
 
-
     //FirebaseMessaging messaging = FirebaseMessaging.getInstance();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         fireBase = FireBaseModel.getInstance();
         fireBase.setApp(this.getApplication());
+
+        setContentView(R.layout.activity_main);
+
         loginRegisterViewModel = new LoginRegisterViewModel(this.getApplication());
         //drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);
         coordinatorLayout = findViewById(R.id.coordinator);
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         View headerView  = navigationView.getHeaderView(0);
         TextView userTv = headerView.findViewById(R.id.navigation_header_text_view);
+        //loginRegisterViewModel.signInAnonymously();
+
+
+        /**
+        if(loginRegisterViewModel.getUser()==null) {
+            loginRegisterViewModel.signInAnonymously();
+        }
+
 
         if(loginRegisterViewModel.getUser().isAnonymous())
             userTv.setText("Welcome Guest");
+         **/
+
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        if(loginRegisterViewModel.getUser()!=null) {
-            //messaging.subscribeToTopic(loginRegisterViewModel.getUser().getUid());
-        }
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -105,7 +113,11 @@ public class MainActivity extends AppCompatActivity {
                                 fullName = fullnameEt.getText().toString();
                                 String password = passwordEt.getText().toString();
                                 //loginRegisterViewModel.register(username,password);
-                                loginRegisterViewModel.anonymousRegister(username,password);
+                                if(FireBaseModel.getInstance().getUser() != null) {
+                                    loginRegisterViewModel.anonymousRegister(username, password);
+                                }else{
+                                    loginRegisterViewModel.register(username,password);
+                                }
                                 loginRegisterViewModel.updateName(fullName);
 
                                 userTv.setText("Welcome " + fullName);
@@ -149,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
 
                         break;
                     case R.id.item_sign_out:
-                        //loginRegisterViewModel.signOut();
+                        loginRegisterViewModel.signOut();
                         loginRegisterViewModel.signInAnonymously();
                         break;
                 }
@@ -164,40 +176,54 @@ public class MainActivity extends AppCompatActivity {
                 View headerView  = navigationView.getHeaderView(0);
                 TextView userTv = headerView.findViewById(R.id.navigation_header_text_view);
 
+                //loginRegisterViewModel.signInAnonymously();
                 FirebaseUser user = loginRegisterViewModel.getUser();
-                /**
-                if(user == null){
-                    loginRegisterViewModel.signInAnonymously();
-                    user = loginRegisterViewModel.getUser();
-                }
-                 **/
-                    if(user.isAnonymous()){
-                        userTv.setText("Please Login");
-                        toolbar.setTitle("Hello Guest");
-                    }else{
-                        userTv.setText("Welcome " + user.getDisplayName());
-                        toolbar.setTitle("Welcome " + user.getDisplayName());
 
-                    }
-                    if(FireBaseModel.getInstance().getUser().isAnonymous()){
-                        navigationView.getMenu().findItem(R.id.item_sign_in).setVisible(true);
-                        navigationView.getMenu().findItem(R.id.item_sign_up).setVisible(true);
-                        navigationView.getMenu().findItem(R.id.item_sign_out).setVisible(false);
-                    }else{
-                        navigationView.getMenu().findItem(R.id.item_sign_in).setVisible(false);
-                        navigationView.getMenu().findItem(R.id.item_sign_up).setVisible(false);
-                        navigationView.getMenu().findItem(R.id.item_sign_out).setVisible(true);
+                //if(user == null){
+                   // loginRegisterViewModel.signInAnonymously();
+                   // loginRegisterViewModel.register("temp@gmail.com","123456");
+                   // user = loginRegisterViewModel.getUser();
+                //}
+                    if(user != null) {
+                        if (user.isAnonymous()) {
+                            userTv.setText("Please Login");
+                            toolbar.setTitle("Hello Guest");
+                        } else {
+                            userTv.setText("Welcome " + user.getDisplayName());
+                            toolbar.setTitle("Welcome " + user.getDisplayName());
+                        }
+                        if (FireBaseModel.getInstance().getUser().isAnonymous()) {
+                            navigationView.getMenu().findItem(R.id.item_sign_in).setVisible(true);
+                            navigationView.getMenu().findItem(R.id.item_sign_up).setVisible(true);
+                            navigationView.getMenu().findItem(R.id.item_sign_out).setVisible(false);
+                        } else {
+                            navigationView.getMenu().findItem(R.id.item_sign_in).setVisible(false);
+                            navigationView.getMenu().findItem(R.id.item_sign_up).setVisible(false);
+                            navigationView.getMenu().findItem(R.id.item_sign_out).setVisible(true);
+                        }
                     }
 
             }
         };
+
         createBottomNav();
+
     }
     @Override
     protected void onStart() {
         super.onStart();
+        loginRegisterViewModel.signInAnonymously();
         loginRegisterViewModel.setNewListener(authStateListener);
+
+
     }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
 
     public void createBottomNav(){
         BottomNavigationView navView = findViewById(R.id.nav_view);

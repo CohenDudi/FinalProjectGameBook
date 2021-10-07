@@ -117,11 +117,14 @@ public class HomePostLookingForGameAdapter extends RecyclerView.Adapter<HomePost
         holder.recyclerView.setHasFixedSize(true);
         holder.recyclerView.setAdapter(adapter);
         holder.recyclerView.setRecycledViewPool(viewPool);
-        Boolean b = FireBaseModel.getInstance().getUser().isAnonymous();
-        if (FireBaseModel.getInstance().getUser().isAnonymous() || !homePostLookingForGame.getUserId().equals(FireBaseModel.getInstance().getUser().getUid()))
-            holder.closeBtn.setVisibility(View.INVISIBLE);
+        //Boolean b = FireBaseModel.getInstance().getUser().isAnonymous();
+        if(FireBaseModel.getInstance().getUser()!=null)
+            if (FireBaseModel.getInstance().getUser().isAnonymous() || !homePostLookingForGame.getUserId().equals(FireBaseModel.getInstance().getUser().getUid()))
+              holder.closeBtn.setVisibility(View.INVISIBLE);
+            else
+               holder.closeBtn.setVisibility(View.VISIBLE);
         else
-            holder.closeBtn.setVisibility(View.VISIBLE);
+            holder.closeBtn.setVisibility(View.INVISIBLE);
 
 
 

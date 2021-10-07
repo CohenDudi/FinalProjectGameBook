@@ -128,11 +128,11 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.RoleViewHolder
          **/
         FirebaseUser u = FireBaseModel.getInstance().getUser();
         User user;
-        if(!u.isAnonymous()){
-            user = new User(u.getDisplayName(),u.getUid());
+        if(u == null|| u.isAnonymous() ){
+            user = new User("Anonymous", "");
         }
         else{
-            user = new User("Anonymous", u.getUid());
+            user = new User(u.getDisplayName(),u.getUid());
         }
 
         if(role.isUserInList(user) || flag ==0){
@@ -168,7 +168,7 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.RoleViewHolder
                 }
             });
 
-            if(FireBaseModel.getInstance().getUser().isAnonymous() || FireBaseModel.getInstance().getUser().getUid().equals(originalPoster)){
+            if(FireBaseModel.getInstance().getUser()== null || FireBaseModel.getInstance().getUser().isAnonymous() || FireBaseModel.getInstance().getUser().getUid().equals(originalPoster)){
                 holder.remove.setVisibility(View.INVISIBLE);
             }else{
                 holder.remove.setVisibility(View.VISIBLE);

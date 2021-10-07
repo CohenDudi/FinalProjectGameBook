@@ -41,32 +41,24 @@ public class feedFragment extends Fragment {
     HomePostLookingForGameAdapter adapter;
     User user;
     ValueEventListener eventUpdatePosts;
+    View root;
+    RecyclerView recyclerView;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //FireBaseModel.getInstance().readAllPosts();
-    }
-
-
-
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        feedViewModel = new ViewModelProvider(this).get(feedViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_feed, container, false);
-        if(!feedViewModel.isAnonymous())
-            user = new User(FireBaseModel.getInstance().getUser().getDisplayName(),FireBaseModel.getInstance().getUser().getUid());
-        else{
-            user = new User("Anonymous",FireBaseModel.getInstance().getUser().getUid());
-        }
+        if(FireBaseModel.getInstance().getUser()!=null)
+            if(!FireBaseModel.getInstance().getUser().isAnonymous())
+                user = new User(FireBaseModel.getInstance().getUser().getDisplayName(),FireBaseModel.getInstance().getUser().getUid());
+            else{
+                user = new User("Anonymous",FireBaseModel.getInstance().getUser().getUid());
+            }
         feedPosts = FireBaseModel.getInstance().getAllPosts();
 
-        RecyclerView recyclerView = root.findViewById(R.id.recyclerFeed);
         //feedPosts = FireBaseModel.getInstance().getAllPosts();
 
         adapter = new HomePostLookingForGameAdapter(feedPosts,getContext(),user,1);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(adapter);
 
         adapter.setListener(new HomePostLookingForGameAdapter.HomePostLookingForGameAdapterListener() {
             @Override
@@ -91,6 +83,18 @@ public class feedFragment extends Fragment {
         });
 
         updatePosts();
+    }
+
+
+
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        feedViewModel = new ViewModelProvider(this).get(feedViewModel.class);
+        root = inflater.inflate(R.layout.fragment_feed, container, false);
+        recyclerView = root.findViewById(R.id.recyclerFeed);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(adapter);
+
         return root;
     }
 
