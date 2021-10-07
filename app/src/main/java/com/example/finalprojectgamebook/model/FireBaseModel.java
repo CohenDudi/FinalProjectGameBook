@@ -1,6 +1,7 @@
 package com.example.finalprojectgamebook.model;
 
 import android.app.Application;
+import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -140,6 +141,14 @@ public class FireBaseModel {
             }
         }
 
+    public void updateImg(Uri uri){
+        getUser().updateProfile(new UserProfileChangeRequest.Builder().setPhotoUri(uri).build()).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+
+            }
+        });
+    }
 
     public void login(String email, String password){
         firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {

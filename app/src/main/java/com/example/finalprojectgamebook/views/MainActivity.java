@@ -1,5 +1,9 @@
 package com.example.finalprojectgamebook.views;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -13,18 +17,28 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,18 +54,28 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.List;
 //import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity {
-    DrawerLayout drawerLayout;
     NavigationView navigationView;
     CoordinatorLayout coordinatorLayout;
     String fullName;
     FireBaseModel fireBase;
     FirebaseAuth.AuthStateListener authStateListener;
     LoginRegisterViewModel loginRegisterViewModel;
+    ImageButton profileBtn;
+    TextView userTv;
+    Toolbar toolbar;
+    ActivityResultLauncher<Intent> takePictureActivity;
+    Bitmap bitmap;
+    ImageView photo;
 
     //FirebaseMessaging messaging = FirebaseMessaging.getInstance();
 
@@ -67,11 +91,12 @@ public class MainActivity extends AppCompatActivity {
         //drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);
         coordinatorLayout = findViewById(R.id.coordinator);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
+        profileBtn = findViewById(R.id.userProfileBtn);
         setSupportActionBar(toolbar);
 
         View headerView  = navigationView.getHeaderView(0);
-        TextView userTv = headerView.findViewById(R.id.navigation_header_text_view);
+        userTv = headerView.findViewById(R.id.navigation_header_text_view);
         //loginRegisterViewModel.signInAnonymously();
 
 
@@ -87,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -123,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
                                 userTv.setText("Welcome " + fullName);
                                 toolbar.setTitle("Welcome " + fullName);
                                 fullName = null;
+
 
                                 alertDialog.dismiss();
                             }
@@ -206,7 +233,15 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        profileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openProfile();
+            }
+        });
+
         createBottomNav();
+        createResult();
 
     }
     @Override
@@ -268,6 +303,179 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
     }
+
+    public void openProfile(){
+        //List<User> users = sectionViewModel.getContacts();
+        //final Boolean[] ifFriends = {checkIfFriends(chats.get(position).getUserId(),users)};
+
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(this);
+        View view = layoutInflaterAndroid.inflate(R.layout.profile_dialog, null);
+        builder.setView(view);
+        builder.setCancelable(false);
+        androidx.appcompat.app.AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        Button close_btn = view.findViewById(R.id.profile_close_btn);
+        Button changePhotoBtn = view.findViewById(R.id.profile_add_new_img_btn);
+        TextView emailTv = view.findViewById(R.id.email_profile_tv);
+        EditText userNameEt = view.findViewById(R.id.profile_name_et);
+        EditText passwordEt = view.findViewById(R.id.profile_password_et);
+        ImageButton usernameBtn = view.findViewById(R.id.profile_name_btn);
+        ImageButton passwordBtn = view.findViewById(R.id.profile_password_btn);
+        photo = view.findViewById(R.id.profile_img);
+
+        FirebaseUser user = fireBase.getUser();
+
+
+        emailTv.setText(user.getEmail());
+        userNameEt.setText(user.getDisplayName());
+
+        close_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+
+        usernameBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!userNameEt.isEnabled()){
+                    userNameEt.setEnabled(true);
+                    userNameEt.setText("");
+                    userNameEt.requestFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(userNameEt, InputMethodManager.SHOW_IMPLICIT);
+
+                }else{
+                    userNameEt.setEnabled(false);
+                    loginRegisterViewModel.updateName(userNameEt.getText().toString());
+                    //user.reload();
+                    userTv.setText("Welcome "+ userNameEt.getText().toString());
+                    toolbar.setTitle("Welcome "+ userNameEt.getText().toString());
+
+                    Snackbar.make(findViewById(android.R.id.content), "Username Changed", Snackbar.LENGTH_LONG).show();
+
+                }
+            }
+        });
+
+        passwordBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!passwordEt.isEnabled()){
+                    passwordEt.setEnabled(true);
+                    passwordEt.setText("");
+                    passwordEt.requestFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(passwordEt, InputMethodManager.SHOW_IMPLICIT);
+
+                }else{
+                    passwordEt.setEnabled(false);
+                    user.updatePassword(passwordEt.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                Snackbar.make(findViewById(android.R.id.content), "Password Changed", Snackbar.LENGTH_LONG).show();
+                            }else{
+                                Snackbar.make(findViewById(android.R.id.content), "Password Not Changed "+ task.getException().getMessage().toString(), Snackbar.LENGTH_LONG).show();
+
+                            }
+                        }
+                    });
+
+                }
+
+            }
+        });
+
+
+
+        changePhotoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                takePictureActivity.launch(intent);
+
+
+            }
+        });
+
+
+
+
+        /**
+        if(ifFriends[0] || chats.get(position).getUserId().equals(sectionViewModel.getUser().getUid())){
+            add_friend_btn.setEnabled(false);
+        }
+
+
+        close_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+
+        add_friend_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!ifFriends[0] ){
+                    User me = new User(sectionViewModel.getUser().getDisplayName(),sectionViewModel.getUser().getUid());
+                    sectionViewModel.addNewContact(new User(chats.get(position).getName(),chats.get(position).getUserId()));
+                    sectionViewModel.addNewFriendContact(me,chats.get(position).getUserId());
+                    ifFriends[0] = true;
+                    add_friend_btn.setEnabled(false);
+                }
+
+            }
+        });
+
+        if(sectionViewModel.isAnonymous())
+        {
+            add_friend_btn.setEnabled(false);
+            add_friend_btn.setText("Please Login");
+
+        }
+
+
+    **/
+    }
+
+    public void createResult(){
+        takePictureActivity = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            Intent data = result.getData();
+                            Uri imageUri = data.getData();
+                            fireBase.updateImg(imageUri);
+
+                            Uri test;
+                            //Bitmap imageBitmap = null;
+                            try {
+                                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), loginRegisterViewModel.getUser().getPhotoUrl());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 10, baos); //bm is the bitmap object
+                            byte[] b = baos.toByteArray();
+                            String encoded = Base64.encodeToString(b, Base64.DEFAULT);
+                            //bitmap.setImageBitmap(imageBitmap);
+                            photo.setImageBitmap(bitmap);
+
+
+                        }
+                    }
+                });
+
+    }
+
 
 
 }

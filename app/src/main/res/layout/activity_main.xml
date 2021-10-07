@@ -18,7 +18,20 @@
             android:background="@color/black"
             app:title="hello"
             app:titleTextColor="@color/white"
-            app:layout_collapseMode="pin" />
+            app:layout_collapseMode="pin" >
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:src="@drawable/ic_baseline_supervised_user_circle_24"
+                android:background="@null"
+                android:id="@+id/userProfileBtn"
+                />
+
+
+        </androidx.appcompat.widget.Toolbar>
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view_section"
         android:layout_width="match_parent"
