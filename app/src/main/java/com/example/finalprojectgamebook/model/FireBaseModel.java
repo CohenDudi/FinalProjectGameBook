@@ -1,8 +1,11 @@
 package com.example.finalprojectgamebook.model;
 
 import android.app.Application;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -10,6 +13,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.finalprojectgamebook.views.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
@@ -24,7 +29,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -52,7 +64,7 @@ public class FireBaseModel {
         readAllPosts();
 
         //readSelfUser();
-        //readContacts();
+        readContacts();
     }
 
 
@@ -126,8 +138,6 @@ public class FireBaseModel {
                     });
         else
             getUser().reload();
-
-
     }
 
     public void updateName(String fullName){
@@ -148,6 +158,54 @@ public class FireBaseModel {
 
             }
         });
+    }
+
+    public void updateBitmap(Bitmap bitmap){
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        StorageReference mountainsRef = storageRef.child(getUser().getUid());
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = mountainsRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+            }
+        });
+
+    }
+
+    public Bitmap getBitmap(String userId) throws IOException {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        StorageReference mountainsRef = storageRef.child(getUser().getUid());
+        File localFile = File.createTempFile("images", "jpg");
+
+        mountainsRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                // Local temp file has been created
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+            }
+        });
+        Bitmap b = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+        return b;
+
+
     }
 
     public void login(String email, String password){
@@ -288,6 +346,7 @@ public class FireBaseModel {
     }
 
     public void readContacts(){
+        if(getUser()!=null)
         if(!getUser().isAnonymous())
          {
             mDatabase.child("contact").child(getUser().getUid()).addValueEventListener(new ValueEventListener() {

@@ -1,11 +1,16 @@
 package com.example.finalprojectgamebook.views;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -52,6 +57,8 @@ public class PrivateChatFragment extends Fragment {
     ChatSectionAdapter adapter;
     FirebaseUser user;
     FirebaseMessaging messaging = FirebaseMessaging.getInstance();
+    BroadcastReceiver receiver;
+
     final String API_TOKEN_KEY = "AAAAV1YpTgI:APA91bFsz1JYI6wx0TKdJK10hsrFthaZQlwLp6uLApQF-Z_3IHmneGgEgzkCZ1QTxvjgtRhxUnSAhTogwGm4iK7ObbbprcJCl1gy7T9f5YyMJhSX--IqWkzt1ZPZ1PFt1ypwXNOhQhGX";
 
 
@@ -130,10 +137,11 @@ public class PrivateChatFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         priavteChatViewModel.changeMsgSeen(friendId,1);
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(receiver);
     }
 
     public void sendNotification(String friendId,String text){
-        messaging.subscribeToTopic(friendId);
+        //messaging.subscribeToTopic(friendId);
         final JSONObject rootObject  = new JSONObject();
         try{
             rootObject.put("to", "/topics/"+friendId);
@@ -172,6 +180,18 @@ public class PrivateChatFragment extends Fragment {
         }catch (JSONException e){
             e.printStackTrace();
         }
+
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                //messageTv.setText(intent.getStringExtra("message"));
+            }
+        };
+
+
+        IntentFilter filter = new IntentFilter("message_received");
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(receiver,filter);
 
     }
 }

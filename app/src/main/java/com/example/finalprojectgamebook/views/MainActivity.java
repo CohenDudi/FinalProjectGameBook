@@ -21,12 +21,16 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
@@ -42,6 +46,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.finalprojectgamebook.R;
 import com.example.finalprojectgamebook.model.FireBaseModel;
 import com.example.finalprojectgamebook.model.User;
@@ -57,10 +62,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 //import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity {
@@ -73,6 +83,10 @@ public class MainActivity extends AppCompatActivity {
     ImageButton profileBtn;
     TextView userTv;
     Toolbar toolbar;
+
+    FirebaseMessaging messaging = FirebaseMessaging.getInstance();
+    BroadcastReceiver receiver;
+
     ActivityResultLauncher<Intent> takePictureActivity;
     Bitmap bitmap;
     ImageView photo;
@@ -212,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
                    // user = loginRegisterViewModel.getUser();
                 //}
                     if(user != null) {
+                        messaging.subscribeToTopic(user.getUid());
                         if (user.isAnonymous()) {
                             userTv.setText("Please Login");
                             toolbar.setTitle("Hello Guest");
@@ -236,12 +251,15 @@ public class MainActivity extends AppCompatActivity {
         profileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openProfile();
+                try {
+                    openProfile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         createBottomNav();
-        createResult();
 
     }
     @Override
@@ -296,7 +314,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
     @Override
@@ -304,7 +321,7 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    public void openProfile(){
+    public void openProfile() throws IOException {
         //List<User> users = sectionViewModel.getContacts();
         //final Boolean[] ifFriends = {checkIfFriends(chats.get(position).getUserId(),users)};
 
@@ -317,19 +334,16 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
 
         Button close_btn = view.findViewById(R.id.profile_close_btn);
-        Button changePhotoBtn = view.findViewById(R.id.profile_add_new_img_btn);
         TextView emailTv = view.findViewById(R.id.email_profile_tv);
         EditText userNameEt = view.findViewById(R.id.profile_name_et);
         EditText passwordEt = view.findViewById(R.id.profile_password_et);
         ImageButton usernameBtn = view.findViewById(R.id.profile_name_btn);
         ImageButton passwordBtn = view.findViewById(R.id.profile_password_btn);
-        photo = view.findViewById(R.id.profile_img);
 
         FirebaseUser user = fireBase.getUser();
-
-
         emailTv.setText(user.getEmail());
         userNameEt.setText(user.getDisplayName());
+
 
         close_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -384,98 +398,13 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
-
                 }
-
             }
         });
 
 
-
-        changePhotoBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-                takePictureActivity.launch(intent);
-
-
-            }
-        });
-
-
-
-
-        /**
-        if(ifFriends[0] || chats.get(position).getUserId().equals(sectionViewModel.getUser().getUid())){
-            add_friend_btn.setEnabled(false);
-        }
-
-
-        close_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialog.dismiss();
-            }
-        });
-
-        add_friend_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!ifFriends[0] ){
-                    User me = new User(sectionViewModel.getUser().getDisplayName(),sectionViewModel.getUser().getUid());
-                    sectionViewModel.addNewContact(new User(chats.get(position).getName(),chats.get(position).getUserId()));
-                    sectionViewModel.addNewFriendContact(me,chats.get(position).getUserId());
-                    ifFriends[0] = true;
-                    add_friend_btn.setEnabled(false);
-                }
-
-            }
-        });
-
-        if(sectionViewModel.isAnonymous())
-        {
-            add_friend_btn.setEnabled(false);
-            add_friend_btn.setText("Please Login");
-
-        }
-
-
-    **/
-    }
-
-    public void createResult(){
-        takePictureActivity = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult result) {
-                        if (result.getResultCode() == Activity.RESULT_OK) {
-                            Intent data = result.getData();
-                            Uri imageUri = data.getData();
-                            fireBase.updateImg(imageUri);
-
-                            Uri test;
-                            //Bitmap imageBitmap = null;
-                            try {
-                                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), loginRegisterViewModel.getUser().getPhotoUrl());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
-                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            bitmap.compress(Bitmap.CompressFormat.JPEG, 10, baos); //bm is the bitmap object
-                            byte[] b = baos.toByteArray();
-                            String encoded = Base64.encodeToString(b, Base64.DEFAULT);
-                            //bitmap.setImageBitmap(imageBitmap);
-                            photo.setImageBitmap(bitmap);
-
-
-                        }
-                    }
-                });
 
     }
-
 
 
 }
