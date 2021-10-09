@@ -11,6 +11,9 @@
         <action
             android:id="@+id/action_navigation_feed_to_navigation_favorite"
             app:destination="@id/navigation_favorite" />
+        <action
+            android:id="@+id/action_navigation_feed_to_navigation_discover"
+            app:destination="@id/navigation_discover" />
     </fragment>
     <fragment
         android:id="@+id/navigation_favorite"

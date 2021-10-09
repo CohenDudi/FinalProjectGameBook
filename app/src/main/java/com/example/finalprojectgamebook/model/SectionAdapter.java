@@ -89,7 +89,7 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.SectionV
         if(usersIds.contains(selfId)){
             holder.favoriteBtn.setImageResource(R.drawable.favorite_star_icon);
         }else{
-            holder.favoriteBtn.setImageResource(R.drawable.favorite_star_icon_gray);
+            holder.favoriteBtn.setImageResource(R.drawable.ic_baseline_star_24);
         }
 
 

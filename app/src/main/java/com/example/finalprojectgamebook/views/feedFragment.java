@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -63,6 +64,14 @@ public class feedFragment extends Fragment {
         adapter.setListener(new HomePostLookingForGameAdapter.HomePostLookingForGameAdapterListener() {
             @Override
             public void onHomePostLookingForGameAdapterClicked(int position, View view) {
+                Bundle bundle = new Bundle();
+                Section section = null;
+                for (Section s:FireBaseModel.getInstance().getSections()) {
+                    if(s.getName().equals(feedPosts.get(position).getGameName()))
+                        section = s;
+                }
+                bundle.putSerializable("games",section);
+                Navigation.findNavController(view).navigate(R.id.action_navigation_feed_to_navigation_discover, bundle);
 
             }
 
@@ -78,6 +87,11 @@ public class feedFragment extends Fragment {
 
             @Override
             public void onClosedClicked(int position, View view) {
+
+            }
+
+            @Override
+            public void onLeaderClicked(int position, View view) {
 
             }
         });

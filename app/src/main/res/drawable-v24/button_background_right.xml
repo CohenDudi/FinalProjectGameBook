@@ -22,7 +22,7 @@
         android:width="150dp" />
 
     <stroke android:width="5px"
-        android:color="@color/green" />
+        android:color="@color/gray_three" />
 </shape>
 
 

@@ -11,6 +11,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
+            android:background="@color/gray_two"
             >
 
                 <ImageView
@@ -28,6 +29,7 @@
                     android:text="Name text"
                     android:gravity="left"
                     android:id="@+id/contact_name"
+                    android:textColor="@color/white"
                     android:layout_marginRight="5dp"/>
                 <LinearLayout
                     android:layout_width="match_parent"

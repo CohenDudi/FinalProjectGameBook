@@ -39,6 +39,7 @@ public class HomePostLookingForGameAdapter extends RecyclerView.Adapter<HomePost
         void onHomePostLookingForGameAdapterLongClicked(int position, View view);
         void onHomePostLookingForGameAdapterRecyclerClicked(int position, View view);
         void onClosedClicked(int position,View view);
+        void onLeaderClicked(int position,View view);
     }
 
     private HomePostLookingForGameAdapter.HomePostLookingForGameAdapterListener listener;
@@ -54,6 +55,7 @@ public class HomePostLookingForGameAdapter extends RecyclerView.Adapter<HomePost
         TextView name;
         RecyclerView recyclerView;
         ImageButton closeBtn;
+        TextView gameName;
 
         public HomePostLookingForGameViewHolder(View itemView) {
             super(itemView);
@@ -62,6 +64,7 @@ public class HomePostLookingForGameAdapter extends RecyclerView.Adapter<HomePost
             name = itemView.findViewById(R.id.home_post_userName);
             recyclerView = itemView.findViewById(R.id.recyclerLookingForGame);
             closeBtn = itemView.findViewById(R.id.close_home_game_btn);
+            gameName = itemView.findViewById(R.id.game_name_tv);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -93,6 +96,13 @@ public class HomePostLookingForGameAdapter extends RecyclerView.Adapter<HomePost
                 }
             });
 
+            name.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onLeaderClicked(getAdapterPosition(),v);
+                }
+            });
+
 
         }
     }
@@ -109,10 +119,11 @@ public class HomePostLookingForGameAdapter extends RecyclerView.Adapter<HomePost
     public void onBindViewHolder(@NonNull HomePostLookingForGameAdapter.HomePostLookingForGameViewHolder holder, int position) {
 
         HomePostLookingForGame homePostLookingForGame = homePostLookingForGames.get(position);
+        holder.gameName.setText(homePostLookingForGame.getGameName());
         holder.description.setText(homePostLookingForGame.getDescription());
         holder.name.setText(homePostLookingForGame.getUserName());
         int tempPosition = position;
-        RoleAdapter adapter = new RoleAdapter(homePostLookingForGame.getRoles(),1,context,homePostLookingForGame.getUserId(),position, homePostLookingForGame.getGameName());
+        RoleAdapter adapter = new RoleAdapter(homePostLookingForGame.getRoles(),1,context,homePostLookingForGame.getUserId(),position, homePostLookingForGame.getGameName(),flagIsFeed);
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(context));
         holder.recyclerView.setHasFixedSize(true);
         holder.recyclerView.setAdapter(adapter);
@@ -123,9 +134,10 @@ public class HomePostLookingForGameAdapter extends RecyclerView.Adapter<HomePost
               holder.closeBtn.setVisibility(View.INVISIBLE);
             else
                holder.closeBtn.setVisibility(View.VISIBLE);
-        else
+        if(flagIsFeed==1){
             holder.closeBtn.setVisibility(View.INVISIBLE);
 
+        }
 
 
 

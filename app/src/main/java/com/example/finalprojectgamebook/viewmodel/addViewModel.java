@@ -41,6 +41,8 @@ public class addViewModel extends ViewModel {
             if(s.getName().equals(""))return 4;
             if(s.getType().equals(""))return 3;
             if(s.getDescription().equals(""))return 2;
+            if(s.getDescription().length()>100)return 6;
+            if(s.getImg() == null)return 7;
 
         }
         return 0;

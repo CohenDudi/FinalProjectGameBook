@@ -2,6 +2,7 @@ package com.example.finalprojectgamebook.views;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,12 +23,14 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.finalprojectgamebook.R;
+import com.example.finalprojectgamebook.model.ChatSection;
 import com.example.finalprojectgamebook.model.FireBaseModel;
 import com.example.finalprojectgamebook.model.HomePostLookingForGame;
 import com.example.finalprojectgamebook.model.HomePostLookingForGameAdapter;
@@ -88,8 +91,12 @@ public class SectionHomeFragment extends Fragment {
          mainImg.setImageBitmap(temp);
         titleTxt.setText(section.getName());
         descTxt.setText(section.getDescription());
-
-
+        if(sectionViewModel.getUser()==null){
+            fab.setEnabled(false);
+        }else{
+            if(sectionViewModel.getUser().isAnonymous())
+                fab.setEnabled(false);
+        }
         homePostLookingForGames = sectionViewModel.getPosts();
 
          fab.setOnClickListener(new View.OnClickListener() {
@@ -151,9 +158,13 @@ public class SectionHomeFragment extends Fragment {
                 homePostLookingForGames.remove(position);
                 sectionViewModel.updateAllPosts(homePostLookingForGames);
             }
+
+            @Override
+            public void onLeaderClicked(int position, View view) {
+                openFriendProfile(position);
+            }
         });
         updatePosts();
-
     }
 
     public void updatePosts() {
@@ -175,9 +186,6 @@ public class SectionHomeFragment extends Fragment {
 
         public void openDialog(){
         List<Role> roles = new ArrayList();
-        roles.add(new Role("dps",0,3));
-        roles.add(new Role("healer",0,1));
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(getContext());
         View view = layoutInflaterAndroid.inflate(R.layout.add_post_dialog, null);
@@ -196,7 +204,7 @@ public class SectionHomeFragment extends Fragment {
         validInput = view.findViewById(R.id.input_text_invalid);
         recyclerView = view.findViewById(R.id.recyclerSectionHomeDialog);
 
-        RoleAdapter adapter = new RoleAdapter(roles,0,getContext(),"",0,"");
+        RoleAdapter adapter = new RoleAdapter(roles,0,getContext(),"",0,"",0);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
@@ -268,4 +276,72 @@ public class SectionHomeFragment extends Fragment {
 
 
     }
+
+    public void openFriendProfile(int position){
+        List<User> users = sectionViewModel.getContacts();
+        final Boolean[] ifFriends = {checkIfFriends(homePostLookingForGames.get(position).getUserId(),users)};
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(getContext());
+        View view = layoutInflaterAndroid.inflate(R.layout.friend_dialog, null);
+        builder.setView(view);
+        builder.setCancelable(false);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        Button close_btn = view.findViewById(R.id.close_btn);
+        Button add_friend_btn = view.findViewById(R.id.add_to_friend_btn);
+        TextView friendName = view.findViewById(R.id.friend_name_txt);
+
+
+
+        friendName.setText(homePostLookingForGames.get(position).getUserName());
+
+        if(ifFriends[0] || homePostLookingForGames.get(position).getUserId().equals(sectionViewModel.getUser().getUid())){
+            add_friend_btn.setEnabled(false);
+            add_friend_btn.setTextColor(Color.GRAY);
+        }
+
+
+        close_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+
+        add_friend_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!ifFriends[0] ){
+                    User me = new User(sectionViewModel.getUser().getDisplayName(),sectionViewModel.getUser().getUid());
+                    sectionViewModel.addNewContact(new User(homePostLookingForGames.get(position).getUserName(),homePostLookingForGames.get(position).getUserId()));
+                    sectionViewModel.addNewFriendContact(me,homePostLookingForGames.get(position).getUserId());
+                    ifFriends[0] = true;
+                    add_friend_btn.setEnabled(false);
+                    add_friend_btn.setTextColor(Color.GRAY);
+                }
+            }
+        });
+
+        if(sectionViewModel.isAnonymous())
+        {
+            add_friend_btn.setEnabled(false);
+            add_friend_btn.setText("Please Login");
+
+        }
+
+
+
+    }
+
+    public boolean checkIfFriends(String userID,List<User> users){
+        for (User user:users) {
+            if(user.getUserId().equals(userID))return true;
+        }
+        return false;
+    }
+
+
 }

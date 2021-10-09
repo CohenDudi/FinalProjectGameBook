@@ -3,13 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/gray_three">
 
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
+        android:background="@color/gray_three"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -19,7 +21,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/green"
+            android:background="@color/gray_three"
             android:orientation="vertical">
 
             <ImageView
@@ -55,22 +57,26 @@
                 android:layout_weight="1"
                 >
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/close_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_weight="10"
+                    android:background="@drawable/button_background"
+                    android:textColor="@color/white"
                     android:text="Close"
                     android:textAllCaps="false"
                     tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:textAllCaps="false"
                     android:id="@+id/add_to_friend_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/button_background"
+                    android:textColor="@color/white"
                     android:layout_marginRight="10dp"
                     android:layout_marginLeft="10dp"
                     android:text="Add to friends"

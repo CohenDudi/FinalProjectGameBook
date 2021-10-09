@@ -67,9 +67,14 @@ public class addFragment extends Fragment {
         sectionImg = root.findViewById(R.id.img_section);
         Button buttonNewSection = root.findViewById(R.id.button_new_section);
 
+
         buttonNewSection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(fireBaseModel.getUser()!=null)
+                    if(!fireBaseModel.getUser().isAnonymous()){
+
+
                 Section section = new Section(name.getText().toString(), type.getText().toString(), desc.getText().toString(),encoded);
                 int validateSection = addViewModel.isSectionNotExist(section);
                 switch (validateSection){
@@ -89,10 +94,19 @@ public class addFragment extends Fragment {
                     case 3:
                         Snackbar.make(root , "Game type is empty", Snackbar.LENGTH_SHORT).show();
                         break;
+                    case 6:
+                        Snackbar.make(root , "Description is too long", Snackbar.LENGTH_SHORT).show();
+                        break;
+                    case 7:
+                        Snackbar.make(root , "Please add a picture", Snackbar.LENGTH_SHORT).show();
+                        break;
                     default:
                         Snackbar.make(root , "Empty", Snackbar.LENGTH_SHORT).show();
                         break;
                 }
+                    }
+                else Snackbar.make(root , "Please Login", Snackbar.LENGTH_SHORT).show();
+
             }
         });
 
@@ -124,8 +138,15 @@ public class addFragment extends Fragment {
         addImgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-                takePictureActivity.launch(intent);
+                if(fireBaseModel.getUser() != null){
+                    if(!fireBaseModel.getUser().isAnonymous())
+                    {
+                        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                        takePictureActivity.launch(intent);
+                    }
+                }
+                else Snackbar.make(root , "Please Login", Snackbar.LENGTH_SHORT).show();
+
             }
         });
 

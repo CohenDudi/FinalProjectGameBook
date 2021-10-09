@@ -25,9 +25,10 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.RoleViewHolder
     private String originalPoster;
     int adapterPosition;
     String gameName;
+    int isFeed;
 
 
-    public RoleAdapter(List<Role> roles,int flag,Context context,String originalPoster,int adapterPosition,String gameName) {
+    public RoleAdapter(List<Role> roles,int flag,Context context,String originalPoster,int adapterPosition,String gameName,int isFeed) {
 
         this.roles = roles;
         this.flag = flag;
@@ -35,6 +36,7 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.RoleViewHolder
         this.originalPoster = originalPoster;
         this.adapterPosition = adapterPosition;
         this.gameName = gameName;
+        this.isFeed = isFeed;
     }
 
     public interface RoleListener {
@@ -118,15 +120,8 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.RoleViewHolder
         holder.name.setText(role.getName());
         holder.min.setText(String.valueOf(role.getMin()));
         holder.max.setText(String.valueOf(role.getMax()));
-        //holder.remove.setBackgroundResource(R.drawable.ic_baseline_add_circle_24);
-        /**
-        for (String s: role.getUsers()) {
-            if(FireBaseModel.getInstance().getUser().getUid().equals(s)) {
-                holder.remove.setBackgroundResource(R.drawable.ic_baseline_remove_24);
-            }
-        }
-         **/
         FirebaseUser u = FireBaseModel.getInstance().getUser();
+
         User user;
         if(u == null|| u.isAnonymous() ){
             user = new User("Anonymous", "");
@@ -140,6 +135,7 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.RoleViewHolder
         }else{
             holder.remove.setBackgroundResource(R.drawable.ic_baseline_add_circle_24);
         }
+
 
         if(flag == 1){
             roleListAdapter adapter = new roleListAdapter(role.getUsers(),originalPoster);
@@ -173,6 +169,11 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.RoleViewHolder
             }else{
                 holder.remove.setVisibility(View.VISIBLE);
             }
+
+            if(isFeed==1){
+                holder.remove.setVisibility(View.INVISIBLE);
+            }
+
         }
 
         //holder.name.setText(role.getName());

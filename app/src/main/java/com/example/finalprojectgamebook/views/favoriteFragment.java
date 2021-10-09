@@ -76,6 +76,11 @@ public class favoriteFragment extends Fragment {
             public void onClosedClicked(int position, View view) {
 
             }
+
+            @Override
+            public void onLeaderClicked(int position, View view) {
+
+            }
         });
 
         updatePosts();

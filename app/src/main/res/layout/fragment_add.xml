@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    tools:context=".views.addFragment">
+    tools:context=".views.addFragment"
+    android:background="@color/gray_one">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,6 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ADD NEW SECTION"
+            android:textColor="@color/white"
 
             />
         <EditText
@@ -24,6 +26,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/add_new_section_name"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
             android:hint="type new section"/>
 
         <EditText
@@ -31,7 +35,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="type new type" />
+            android:hint="type new type"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            />
 
         <EditText
             android:layout_marginTop="16dp"
@@ -41,20 +48,26 @@
             android:layout_weight="1"
             android:maxLength="2000"
             android:maxLines="4"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
             android:hint="type new description"/>
 
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/add_picture_btn"
+            android:textColor="@color/white"
+            android:background="@drawable/button_background"
             android:text="add new picture"/>
 
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/button_new_section"
+            android:textColor="@color/white"
+            android:background="@drawable/button_background"
             android:text="ADD"/>
 
         <ImageView

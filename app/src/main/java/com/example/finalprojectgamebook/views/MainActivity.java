@@ -178,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
 
                         break;
                     case R.id.item_sign_in:
+                        fullnameEt.setVisibility(View.GONE);
                         alertDialog.show();
                         dialogView.findViewById(R.id.sign_in_up).setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -213,38 +214,26 @@ public class MainActivity extends AppCompatActivity {
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-
                 View headerView  = navigationView.getHeaderView(0);
                 TextView userTv = headerView.findViewById(R.id.navigation_header_text_view);
-
-                //loginRegisterViewModel.signInAnonymously();
                 FirebaseUser user = loginRegisterViewModel.getUser();
-
-                //if(user == null){
-                   // loginRegisterViewModel.signInAnonymously();
-                   // loginRegisterViewModel.register("temp@gmail.com","123456");
-                   // user = loginRegisterViewModel.getUser();
-                //}
                     if(user != null) {
                         messaging.subscribeToTopic(user.getUid());
                         if (user.isAnonymous()) {
                             userTv.setText("Please Login");
                             toolbar.setTitle("Hello Guest");
-                        } else {
-                            userTv.setText("Welcome " + user.getDisplayName());
-                            toolbar.setTitle("Welcome " + user.getDisplayName());
-                        }
-                        if (FireBaseModel.getInstance().getUser().isAnonymous()) {
                             navigationView.getMenu().findItem(R.id.item_sign_in).setVisible(true);
                             navigationView.getMenu().findItem(R.id.item_sign_up).setVisible(true);
                             navigationView.getMenu().findItem(R.id.item_sign_out).setVisible(false);
                         } else {
+                            userTv.setText("Welcome " + user.getDisplayName());
+                            toolbar.setTitle("Welcome " + user.getDisplayName());
                             navigationView.getMenu().findItem(R.id.item_sign_in).setVisible(false);
                             navigationView.getMenu().findItem(R.id.item_sign_up).setVisible(false);
                             navigationView.getMenu().findItem(R.id.item_sign_out).setVisible(true);
+                            fireBase.readContacts();
                         }
                     }
-
             }
         };
 

@@ -4,24 +4,26 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardUseCompatPadding="true"
-    app:contentPadding="10dp"
-    app:cardCornerRadius="8dp">
+    android:background="@color/gray_two">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:background="@color/gray_two"
         >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="15dp"
+            >
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_supervised_user_circle_24"
+                android:src="@drawable/ic_baseline_videogame_asset_24"
                 android:id="@+id/section_img" />
 
 
@@ -32,12 +34,13 @@
                 android:textSize="20sp"
                 android:text="Name text"
                 android:gravity="center"
-                android:id="@+id/section_name"/>
+                android:id="@+id/section_name"
+                android:textColor="@color/white"/>
 
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/favorite_star_icon_gray"
+                android:src="@drawable/ic_baseline_star_24"
                 android:id="@+id/favorite_star_btn"
                 android:background="@null"
                 />

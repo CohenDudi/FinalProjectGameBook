@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
+        android:background="@color/gray_one"
         >
 
         <TextView
@@ -20,6 +21,7 @@
             android:textSize="20dp"
             android:text="Name text"
             android:gravity="left"
+            android:textColor="@color/white"
             android:id="@+id/user_name_section"
             android:layout_marginRight="5dp"/>
 

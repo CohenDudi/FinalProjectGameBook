@@ -163,10 +163,12 @@ public class SectionChatFragment extends Fragment {
         TextView friendName = view.findViewById(R.id.friend_name_txt);
 
 
+
         friendName.setText(chats.get(position).getName());
 
         if(ifFriends[0] || chats.get(position).getUserId().equals(sectionViewModel.getUser().getUid())){
             add_friend_btn.setEnabled(false);
+            add_friend_btn.setTextColor(Color.GRAY);
         }
 
 
@@ -186,8 +188,8 @@ public class SectionChatFragment extends Fragment {
                     sectionViewModel.addNewFriendContact(me,chats.get(position).getUserId());
                     ifFriends[0] = true;
                     add_friend_btn.setEnabled(false);
+                    add_friend_btn.setTextColor(Color.GRAY);
                 }
-
             }
         });
 

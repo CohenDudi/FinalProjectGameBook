@@ -62,7 +62,6 @@ public class FireBaseModel {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         readSections();
         readAllPosts();
-
         //readSelfUser();
         readContacts();
     }
@@ -346,6 +345,7 @@ public class FireBaseModel {
     }
 
     public void readContacts(){
+        users.clear();
         if(getUser()!=null)
         if(!getUser().isAnonymous())
          {
