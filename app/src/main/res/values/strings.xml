@@ -55,5 +55,5 @@
     <string name="Chat">Chat</string>
     <string name="Discover">Discover</string>
     <string name="Send_Me_An_Email">Send me an Email</string>
-    <string name="Welcome">Welcome</string>
+    <string name="Welcome">"Welcome "</string>
 </resources>

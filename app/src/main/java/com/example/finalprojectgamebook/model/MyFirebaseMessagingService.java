@@ -19,6 +19,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     final String TAG = "MyFirebaseMessaging";
     private FirebaseAuth firebaseAuth;
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
@@ -36,12 +37,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             NotificationManager manager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
             Notification.Builder builder = new Notification.Builder(this);
 
-            if(Build.VERSION.SDK_INT>=28) {
+            if(Build.VERSION.SDK_INT >= 28) {
                 NotificationChannel channel = new NotificationChannel("id_1", "name_1", NotificationManager.IMPORTANCE_HIGH);
                 manager.createNotificationChannel(channel);
                 builder.setChannelId("id_1");
             }
-            builder.setContentTitle("Hey " + firebaseAuth.getCurrentUser().getDisplayName() + R.string.You_have_a_new_message).setContentText(remoteMessage.getData().get("message")).setSmallIcon(android.R.drawable.star_on);
+            builder.setContentTitle("" + getText(R.string.You_have_a_new_message)).setContentText(remoteMessage.getData().get("message")).setSmallIcon(android.R.drawable.star_on);
             manager.notify(1,builder.build());
         }
 
