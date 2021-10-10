@@ -12,6 +12,8 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -23,6 +25,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.finalprojectgamebook.R;
@@ -58,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         fireBase = FireBaseModel.getInstance();
         fireBase.setApp(this.getApplication());
         setContentView(R.layout.activity_main);
+        rotationIcon();
         loginRegisterViewModel = new LoginRegisterViewModel(this.getApplication());
         navigationView = findViewById(R.id.navigation_view);
         coordinatorLayout = findViewById(R.id.coordinator);
@@ -347,4 +351,36 @@ public class MainActivity extends AppCompatActivity {
             userNameEt.setTextColor(Color.RED);
         }
     }
+
+    void rotationIcon(){
+        ImageView simpleImageView = findViewById(R.id.green_logo_iv);
+        ObjectAnimator scaleDownX = ObjectAnimator.ofFloat(simpleImageView, "scaleX", 0f);
+        ObjectAnimator scaleDownY = ObjectAnimator.ofFloat(simpleImageView, "scaleY", 0f);
+        ObjectAnimator scaleUpX = ObjectAnimator.ofFloat(simpleImageView, "scaleX", 1f);
+        ObjectAnimator scaleUpY = ObjectAnimator.ofFloat(simpleImageView, "scaleY", 1f);
+        ObjectAnimator alpha = ObjectAnimator.ofFloat(simpleImageView,"alpha",-50);
+        scaleUpX.setDuration(3000);
+        scaleUpY.setDuration(3000);
+        alpha.setDuration(50000);
+
+
+        ObjectAnimator rotationDownX = ObjectAnimator.ofFloat(simpleImageView, "rotationY", 360);
+
+        rotationDownX.setDuration(5000);
+        rotationDownX.start();
+
+        scaleDownX.setDuration(6000);
+        scaleDownY.setDuration(6000);
+
+        AnimatorSet scaleDown = new AnimatorSet();
+        scaleDown.play(scaleDownX).with(scaleDownY);
+        //scaleDown.play(scaleDownX).after(scaleDownY);
+        //scaleDown.play(scaleDownY).with(scaleDownX);
+        //scaleDown.play(alpha).after(scaleDownX);
+        scaleDown.play(alpha);
+        scaleDown.start();
+
+    }
+
+
 }

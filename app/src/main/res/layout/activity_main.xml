@@ -87,5 +87,12 @@
         app:menu="@menu/drawer_menu"/>
 
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/gamerbooking_green"
+        android:id="@+id/green_logo_iv" />
+
+
 
 </androidx.drawerlayout.widget.DrawerLayout>
