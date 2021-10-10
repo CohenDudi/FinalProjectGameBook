@@ -3,18 +3,18 @@
 
     <item
         android:id="@+id/item_sign_up"
-        android:title="Sign up"
+        android:title="@string/Sign_Up"
         />
 
     <item android:id="@+id/item_sign_in"
-        android:title="Sign in" />
+        android:title="@string/Sign_In" />
 
     <item android:id="@+id/item_sign_out"
-        android:title="Sign out"
+        android:title="@string/Sign_Out"
         android:visible="false"/>
 
     <item android:id="@+id/item_forgot_password"
-        android:title="I Forgot My Password"
+        android:title="@string/I_Forgot_My_Password"
         android:visible="true"/>
 
 </menu>

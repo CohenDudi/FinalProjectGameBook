@@ -10,6 +10,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.example.finalprojectgamebook.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -40,7 +41,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 manager.createNotificationChannel(channel);
                 builder.setChannelId("id_1");
             }
-            builder.setContentTitle("Hey " + firebaseAuth.getCurrentUser().getDisplayName() + "You have a new message!").setContentText(remoteMessage.getData().get("message")).setSmallIcon(android.R.drawable.star_on);
+            builder.setContentTitle("Hey " + firebaseAuth.getCurrentUser().getDisplayName() + R.string.You_have_a_new_message).setContentText(remoteMessage.getData().get("message")).setSmallIcon(android.R.drawable.star_on);
             manager.notify(1,builder.build());
         }
 

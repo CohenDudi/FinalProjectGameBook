@@ -18,6 +18,7 @@ import com.example.finalprojectgamebook.model.FireBaseModel;
 import com.example.finalprojectgamebook.model.Section;
 import com.example.finalprojectgamebook.model.SectionAdapter;
 import com.example.finalprojectgamebook.viewmodel.GameViewModel;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -52,13 +53,15 @@ public class GameFragment extends Fragment {
 
             @Override
             public void onFavoriteClicked(int position, View view) {
-                List<String> usersIds = sections.get(position).getUsersId();
-                String selfId = FireBaseModel.getInstance().getUser().getUid();
-                if(usersIds.contains(selfId))
-                    usersIds.remove(selfId);
-                else
-                    usersIds.add(selfId);
-                FireBaseModel.getInstance().updateSection(sections.get(position),position);
+                if(!FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
+                    List<String> usersIds = sections.get(position).getUsersId();
+                    String selfId = FireBaseModel.getInstance().getUser().getUid();
+                    if (usersIds.contains(selfId))
+                        usersIds.remove(selfId);
+                    else
+                        usersIds.add(selfId);
+                    FireBaseModel.getInstance().updateSection(sections.get(position), position);
+                }
             }
         });
         updateFeed();

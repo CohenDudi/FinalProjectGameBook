@@ -80,32 +80,32 @@ public class AddFragment extends Fragment {
                 switch (validateSection){
                     case 0:
                         addViewModel.addNewSection(section);
-                        Snackbar.make(root ,section.getName() + " created!" , Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(root ,section.getName() + R.string.Created , Snackbar.LENGTH_SHORT).show();
                         break;
                     case 1:
-                        Snackbar.make(root , "Name already exist", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(root , R.string.Name_Already_Exist, Snackbar.LENGTH_SHORT).show();
                         break;
                     case 4:
-                        Snackbar.make(root , "Game name is empty", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(root , R.string.Game_Name_Is_Empty, Snackbar.LENGTH_SHORT).show();
                         break;
                     case 2:
-                        Snackbar.make(root , "Description is empty", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(root , R.string.Description_Is_Empty, Snackbar.LENGTH_SHORT).show();
                         break;
                     case 3:
-                        Snackbar.make(root , "Game type is empty", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(root , R.string.Game_Type_Is_Empty, Snackbar.LENGTH_SHORT).show();
                         break;
                     case 6:
-                        Snackbar.make(root , "Description is too long", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(root , R.string.Description_is_too_long, Snackbar.LENGTH_SHORT).show();
                         break;
                     case 7:
-                        Snackbar.make(root , "Please add a picture", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(root , R.string.Please_add_a_picture, Snackbar.LENGTH_SHORT).show();
                         break;
                     default:
-                        Snackbar.make(root , "Empty", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(root , R.string.Empty, Snackbar.LENGTH_SHORT).show();
                         break;
                 }
                     }
-                else Snackbar.make(root , "Please Login", Snackbar.LENGTH_SHORT).show();
+                else Snackbar.make(root , R.string.Please_Login, Snackbar.LENGTH_SHORT).show();
 
             }
         });
@@ -140,7 +140,7 @@ public class AddFragment extends Fragment {
                             }
                         }
                         else
-                            Snackbar.make(root , "Invalid image type.", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(root , R.string.Invalid_Image_Type, Snackbar.LENGTH_SHORT).show();
                     }
                 });
 
@@ -155,7 +155,7 @@ public class AddFragment extends Fragment {
                         takePictureActivity.launch(intent);
                     }
                 }
-                else Snackbar.make(root , "Please Login", Snackbar.LENGTH_SHORT).show();
+                else Snackbar.make(root , R.string.Please_Login, Snackbar.LENGTH_SHORT).show();
 
             }
         });

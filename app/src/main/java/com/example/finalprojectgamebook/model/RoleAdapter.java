@@ -24,7 +24,7 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.RoleViewHolder
     private Context context;
     private String originalPoster;
     int adapterPosition;
-    String gameName;
+    private String gameName;
     int isFeed;
 
 

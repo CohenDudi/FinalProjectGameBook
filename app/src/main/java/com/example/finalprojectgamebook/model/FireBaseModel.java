@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.finalprojectgamebook.R;
 import com.example.finalprojectgamebook.views.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -88,7 +89,7 @@ public class FireBaseModel {
                     userMutableLiveData.postValue(firebaseAuth.getCurrentUser());
                 }
                 else
-                    Toast.makeText(application,"register failed"+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(application, R.string.Register_Failed +task.getException().getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -100,7 +101,7 @@ public class FireBaseModel {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                         } else {
-                            Toast.makeText(application, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(application, R.string.Authentication_Failed, Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -124,10 +125,9 @@ public class FireBaseModel {
                             if (!task.isSuccessful())
                             {
                                 Log.w("FirebaseAuth", "signInAnonymously", task.getException());
-                                Toast.makeText(application.getApplicationContext(), "Authentication failed.",
+                                Toast.makeText(application.getApplicationContext(), R.string.Authentication_Failed,
                                         Toast.LENGTH_SHORT).show();
                             }
-                            // ...
                         }
                     });
         else
@@ -209,9 +209,9 @@ public class FireBaseModel {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful())
-                    Toast.makeText(application,"Sign in successful", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(application,R.string.Sign_In_Successful, Toast.LENGTH_SHORT).show();
                 else
-                    Toast.makeText(application,"Sign in failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(application,R.string.Sign_In_Failed, Toast.LENGTH_SHORT).show();
             }
         });
     }

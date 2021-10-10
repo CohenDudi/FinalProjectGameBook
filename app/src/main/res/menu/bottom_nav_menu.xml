@@ -4,27 +4,27 @@
     <item
         android:id="@+id/navigation_feed"
         android:icon="@drawable/feed_icon"
-        android:title="Feed" />
+        android:title="@string/Feed" />
 
     <item
         android:id="@+id/navigation_favorite"
         android:icon="@drawable/favorite_star_icon"
-        android:title="Favorite" />
+        android:title="@string/Favorite" />
 
     <item
         android:id="@+id/navigation_games"
         android:icon="@drawable/ic_baseline_videogame_asset_24"
-        android:title="Games" />
+        android:title="@string/Games" />
 
     <item
         android:id="@+id/navigation_add"
         android:icon="@drawable/ic_baseline_add_circle_24"
-        android:title="Add" />
+        android:title="@string/Add" />
 
     <item
         android:id="@+id/navigation_Contacts"
         android:icon="@drawable/ic_baseline_people_alt_24"
-        android:title="Contacts" />
+        android:title="@string/Contacts" />
 
 
 </menu>

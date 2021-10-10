@@ -17,7 +17,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add New Section"
+            android:text="@string/Add_New_Section"
             android:background="@color/black"
             android:padding="10dp"
             android:textAllCaps="false"
@@ -32,7 +32,7 @@
             android:id="@+id/add_new_section_name"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
-            android:hint="type new section"/>
+            android:hint="@string/Type_New_Section"/>
 
         <EditText
             android:id="@+id/add_new_section_type"
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_marginTop="16dp"
-            android:hint="type new type"
+            android:hint="@string/Type_New_Type"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
             />
@@ -56,7 +56,7 @@
             android:gravity="center"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
-            android:hint="type new description"/>
+            android:hint="@string/Type_New_Description"/>
 
 
         <androidx.appcompat.widget.AppCompatButton
@@ -66,7 +66,7 @@
             android:textColor="@color/white"
             android:background="@drawable/button_background"
             android:textAllCaps="false"
-            android:text="Add New Picture"/>
+            android:text="@string/Add_New_Picture"/>
 
 
         <androidx.appcompat.widget.AppCompatButton
@@ -76,7 +76,7 @@
             android:textColor="@color/white"
             android:background="@drawable/button_background"
             android:textAllCaps="false"
-            android:text="Add"/>
+            android:text="@string/Add"/>
 
         <ImageView
             android:layout_width="match_parent"

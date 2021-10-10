@@ -170,7 +170,7 @@ public class SectionChatFragment extends Fragment {
         if(sectionViewModel.isAnonymous())
         {
             add_friend_btn.setEnabled(false);
-            add_friend_btn.setText("Please Login");
+            add_friend_btn.setText(R.string.Please_Login);
         }
     }
 
