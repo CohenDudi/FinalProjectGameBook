@@ -1,20 +1,13 @@
 package com.example.finalprojectgamebook.views;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,10 +25,8 @@ import com.example.finalprojectgamebook.model.ChatSection;
 import com.example.finalprojectgamebook.model.ChatSectionAdapter;
 import com.example.finalprojectgamebook.model.FireBaseSectionChat;
 import com.example.finalprojectgamebook.model.Section;
-import com.example.finalprojectgamebook.model.SectionAdapter;
 import com.example.finalprojectgamebook.model.User;
-import com.example.finalprojectgamebook.viewmodel.feedViewModel;
-import com.example.finalprojectgamebook.viewmodel.sectionViewModel;
+import com.example.finalprojectgamebook.viewmodel.SectionViewModel;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -45,13 +36,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SectionChatFragment extends Fragment {
-    sectionViewModel sectionViewModel;
-    List<ChatSection> chats = new ArrayList<>();
-    ChatSectionAdapter adapter;
-    FireBaseSectionChat fireBaseSectionChat;
-    Section section;
-    FirebaseUser user;
-    RecyclerView recyclerView;
+    private SectionViewModel sectionViewModel;
+    private List<ChatSection> chats = new ArrayList<>();
+    private ChatSectionAdapter adapter;
+    private FireBaseSectionChat fireBaseSectionChat;
+    private Section section;
+    private FirebaseUser user;
+    private RecyclerView recyclerView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,7 +52,7 @@ public class SectionChatFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        sectionViewModel = new ViewModelProvider(requireActivity()).get(sectionViewModel.class);
+        sectionViewModel = new ViewModelProvider(requireActivity()).get(SectionViewModel.class);
         View root = inflater.inflate(R.layout.fragment_section_chat, container, false);
         section = sectionViewModel.getSection();
         chats = sectionViewModel.getChats();
@@ -86,18 +77,14 @@ public class SectionChatFragment extends Fragment {
         user = sectionViewModel.getUser();
         updateFeed();
 
-
         adapter.setListener(new ChatSectionAdapter.chatListener() {
             @Override
             public void onChatClicked(int position, View view) {
                 openFriendProfile(position);
-                //sectionViewModel.addNewContact(new User(chats.get(position).getName(),chats.get(position).getUserId()));
             }
 
             @Override
-            public void onChatLongClicked(int position, View view) {
-
-            }
+            public void onChatLongClicked(int position, View view) { }
         });
 
         imageButton.setOnClickListener(new View.OnClickListener() {
@@ -119,18 +106,10 @@ public class SectionChatFragment extends Fragment {
                 chats = sectionViewModel.getChats();
                 adapter.notifyDataSetChanged();
                 recyclerView.scrollToPosition(chats.size()-1);
-
-
             }
-
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-
+            public void onCancelled(@NonNull DatabaseError error) { }
         });
-
-
     }
     //hide keyboard after sending a msg
     public static void hideSoftKeyboard(Activity activity) {
@@ -162,16 +141,12 @@ public class SectionChatFragment extends Fragment {
         Button add_friend_btn = view.findViewById(R.id.add_to_friend_btn);
         TextView friendName = view.findViewById(R.id.friend_name_txt);
 
-
-
         friendName.setText(chats.get(position).getName());
 
         if(ifFriends[0] || chats.get(position).getUserId().equals(sectionViewModel.getUser().getUid())){
             add_friend_btn.setEnabled(false);
             add_friend_btn.setTextColor(Color.GRAY);
         }
-
-
         close_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -192,16 +167,11 @@ public class SectionChatFragment extends Fragment {
                 }
             }
         });
-
         if(sectionViewModel.isAnonymous())
         {
             add_friend_btn.setEnabled(false);
             add_friend_btn.setText("Please Login");
-
         }
-
-
-
     }
 
     public boolean checkIfFriends(String userID,List<User> users){
@@ -210,9 +180,4 @@ public class SectionChatFragment extends Fragment {
         }
         return false;
     }
-
-
-
-
-
 }

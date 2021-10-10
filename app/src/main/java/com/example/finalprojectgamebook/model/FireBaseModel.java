@@ -48,12 +48,11 @@ public class FireBaseModel {
     private MutableLiveData<FirebaseUser> userMutableLiveData;
     private DatabaseReference mDatabase;
     private User selfUser;
-    List<Section> sections = new ArrayList<>();
-    List<User> usersFriend = new ArrayList<>();
-    List<User> users = new ArrayList<>();
-    ArrayList<ArrayList<HomePostLookingForGame>> feedPosts = new ArrayList<ArrayList<HomePostLookingForGame>>();
+    private List<Section> sections = new ArrayList<>();
+    private List<User> usersFriend = new ArrayList<>();
+    private List<User> users = new ArrayList<>();
+    private ArrayList<ArrayList<HomePostLookingForGame>> feedPosts = new ArrayList<ArrayList<HomePostLookingForGame>>();
 
-    //List<HomePostLookingForGame> feedPosts = new ArrayList<>();
 
 
     private FireBaseModel(){
@@ -62,7 +61,6 @@ public class FireBaseModel {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         readSections();
         readAllPosts();
-        //readSelfUser();
         readContacts();
     }
 
@@ -101,10 +99,7 @@ public class FireBaseModel {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            //FirebaseUser user = task.getResult().getUser();
-                            //updateUI(user);
                         } else {
-                            //Log.w(TAG, "linkWithCredential:failure", task.getException());
                             Toast.makeText(application, "Authentication failed.", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -149,7 +144,7 @@ public class FireBaseModel {
                 });
             }
         }
-
+/*
     public void updateImg(Uri uri){
         getUser().updateProfile(new UserProfileChangeRequest.Builder().setPhotoUri(uri).build()).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -207,6 +202,8 @@ public class FireBaseModel {
 
     }
 
+
+ */
     public void login(String email, String password){
         firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -267,9 +264,6 @@ public class FireBaseModel {
                 selfUser = null;
                 if(dataSnapshot.exists()) {
                     selfUser = dataSnapshot.getValue(User.class);
-                    //for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    //    selfUser = snapshot.getValue(User.class);
-                    //}
                 }
             }
 
@@ -301,7 +295,6 @@ public class FireBaseModel {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
-        //readAllPosts();
     }
 
     public void readAllPosts(){
@@ -312,35 +305,25 @@ public class FireBaseModel {
                 feedPosts.clear();
                 Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
                 int length = (int) dataSnapshot.getChildrenCount();
-                //String[] sampleString = new String[length];
                 while(i < length) {
-                    //sampleString[i] = iterator.next().getValue().toString();
                     GenericTypeIndicator<ArrayList<HomePostLookingForGame>> t = new GenericTypeIndicator<ArrayList<HomePostLookingForGame>>() {};
                     feedPosts.add(iterator.next().getValue(t));
-                    //Log.d(Integer.toString(i), sampleString[i]);
                     i++;
-
                 }
                 i = 0;
             }
-
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError error) { }
         });
-
     }
 
     public List<HomePostLookingForGame> getAllPosts(){
-
         List<HomePostLookingForGame> temp = new ArrayList<>();
         for (List<HomePostLookingForGame> f:feedPosts) {
             for (HomePostLookingForGame h:f) {
                 temp.add(h);
             }
         }
-
         return temp;
     }
 
@@ -360,11 +343,8 @@ public class FireBaseModel {
                         }
                     }
                 }
-
                 @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
+                public void onCancelled(@NonNull DatabaseError error) { }
             });
         }
     }
@@ -427,6 +407,4 @@ public class FireBaseModel {
 
         }
     }
-
-
 }

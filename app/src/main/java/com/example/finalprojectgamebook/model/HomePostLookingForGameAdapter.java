@@ -1,12 +1,10 @@
 package com.example.finalprojectgamebook.model;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalprojectgamebook.R;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -51,7 +48,6 @@ public class HomePostLookingForGameAdapter extends RecyclerView.Adapter<HomePost
     public class HomePostLookingForGameViewHolder extends RecyclerView.ViewHolder {
 
         TextView description;
-        TextView roles;
         TextView name;
         RecyclerView recyclerView;
         ImageButton closeBtn;
@@ -168,30 +164,10 @@ public class HomePostLookingForGameAdapter extends RecyclerView.Adapter<HomePost
                     }
                 }
                 FireBaseSectionChat.getInstance().updatePosts(tempPos,homePostLookingForGame);
-                //adapter.notifyDataSetChanged();
-
-                /**
-                 * Drawable bg = btn.getBackground();
-                 *                 if(bg == R.drawable.ic_baseline_remove_24)
-                 *                 view.findViewById(R.id.remove_role_btn).setBackgroundResource(R.drawable.ic_baseline_add_circle_24);
-                 */
-
             }
-
             @Override
-            public void onCreateCard(int position, View view) {
-                }
+            public void onCreateCard(int position, View view) { }
         });
-
-
-        /**
-        StringBuilder roles = new StringBuilder();
-        for (Role role:homePostLookingForGame.getRoles()) {
-            roles.append(role.getName()).append(" ").append(role.getMin()).append("/").append(role.getMax()).append("\n");
-        }
-        holder.roles.setText(roles.toString().substring(0,roles.length()-1));
-         **/
-
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.example.finalprojectgamebook.viewmodel;
 
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.finalprojectgamebook.model.FireBaseModel;
@@ -28,6 +27,5 @@ public class ContactViewModel extends ViewModel {
     public FirebaseUser getUser(){
         return fireBaseModel.getUser();
     }
-
 
 }

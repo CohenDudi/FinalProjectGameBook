@@ -1,7 +1,5 @@
 package com.example.finalprojectgamebook.viewmodel;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.finalprojectgamebook.model.ChatSection;
@@ -15,12 +13,11 @@ import com.google.firebase.database.DatabaseReference;
 
 import java.util.List;
 
-public class sectionViewModel extends ViewModel {
-    //private MutableLiveData<Section> section = new MutableLiveData<Section>();;
+public class SectionViewModel extends ViewModel {
     private FireBaseSectionChat fireBaseSectionChat;
     private FireBaseModel fireBaseModel;
 
-    public sectionViewModel() {
+    public SectionViewModel() {
         fireBaseSectionChat = FireBaseSectionChat.getInstance();
         fireBaseModel = FireBaseModel.getInstance();
 

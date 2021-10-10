@@ -43,7 +43,10 @@ public class LoginRegisterViewModel extends AndroidViewModel {
         return userMutableLiveData;
     }
 
-    public void signOut(){fireBase.signOut();}
+    public void signOut(){
+        fireBase.signOut();
+        fireBase.readContacts();
+    }
     public void setNewListener(FirebaseAuth.AuthStateListener authStateListener){
         fireBase.setNewListener(authStateListener);
     }

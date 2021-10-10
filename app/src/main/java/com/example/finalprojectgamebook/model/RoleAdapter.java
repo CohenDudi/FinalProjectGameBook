@@ -163,28 +163,20 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.RoleViewHolder
 
                 }
             });
-
             if(FireBaseModel.getInstance().getUser()== null || FireBaseModel.getInstance().getUser().isAnonymous() || FireBaseModel.getInstance().getUser().getUid().equals(originalPoster)){
                 holder.remove.setVisibility(View.INVISIBLE);
             }else{
                 holder.remove.setVisibility(View.VISIBLE);
             }
-
             if(isFeed==1){
                 holder.remove.setVisibility(View.INVISIBLE);
             }
-
         }
-
-        //holder.name.setText(role.getName());
     }
 
     @Override
     public int getItemCount() {
         return roles.size();
     }
-
-
-    public void test(){}
 
 }

@@ -2,14 +2,10 @@ package com.example.finalprojectgamebook.model;
 
 
 public class ChatSection {
-    String name;
-    String userId;
-
-
-    String msg;
-
-
-    Boolean newMsg;
+    private String name;
+    private String userId;
+    private String msg;
+    private Boolean newMsg;
 
     public String getName() {
         return name;
@@ -30,18 +26,4 @@ public class ChatSection {
         this.msg = msg;
         this.newMsg = false;
     }
-
-    public Boolean getNewMsg() {
-        return newMsg;
-    }
-
-    public void setNewMsg(Boolean newMsg) {
-        this.newMsg = newMsg;
-    }
-
-
-
-
-
-
 }

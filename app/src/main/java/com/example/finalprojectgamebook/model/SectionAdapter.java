@@ -81,9 +81,6 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.SectionV
 
         Section section = sections.get(position);
         holder.name.setText(section.getName());
-        //if(FireBaseModel.getInstance().getSelfUser().isFavorite(section.getName()))
-          //  holder.favoriteBtn.setImageResource(R.drawable.favorite_star_icon);
-        //else
         List<String> usersIds = section.getUsersId();
         String selfId = FireBaseModel.getInstance().getUser().getUid();
         if(usersIds.contains(selfId)){
@@ -91,8 +88,6 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.SectionV
         }else{
             holder.favoriteBtn.setImageResource(R.drawable.ic_baseline_star_24);
         }
-
-
     }
 
     @Override

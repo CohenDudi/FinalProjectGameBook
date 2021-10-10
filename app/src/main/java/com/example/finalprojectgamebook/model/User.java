@@ -4,12 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class User {
-    String name;
-    String userId;
-    String imgUri;
-    List<String> favoriteSection;
-
-    Boolean newMsg;
+    private String name;
+    private String userId;
+    private List<String> favoriteSection;
+    private Boolean newMsg;
 
     public User(){
         this.favoriteSection = new ArrayList<>();

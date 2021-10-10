@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalprojectgamebook.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
@@ -83,10 +84,12 @@ public class roleListAdapter extends RecyclerView.Adapter<roleListAdapter.roleLi
 
         User user = users.get(position);
         holder.name.setText(user.getName());
-        if(FireBaseModel.getInstance().getUser().getUid().equals(originalPoster)){
-            holder.removeBtn.setVisibility(View.VISIBLE);
-        }else{
-            holder.removeBtn.setVisibility(View.INVISIBLE);
+        if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+            if (FireBaseModel.getInstance().getUser().getUid().equals(originalPoster)) {
+                holder.removeBtn.setVisibility(View.VISIBLE);
+            } else {
+                holder.removeBtn.setVisibility(View.INVISIBLE);
+            }
         }
     }
 

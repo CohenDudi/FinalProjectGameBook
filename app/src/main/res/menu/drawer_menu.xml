@@ -13,4 +13,8 @@
         android:title="Sign out"
         android:visible="false"/>
 
+    <item android:id="@+id/item_forgot_password"
+        android:title="I Forgot My Password"
+        android:visible="true"/>
+
 </menu>

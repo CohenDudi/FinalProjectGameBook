@@ -10,8 +10,6 @@ public class Role {
 
     private List<User> users;
 
-
-
     public Role(){
         this.users = new ArrayList<>();
     }
@@ -39,7 +37,6 @@ public class Role {
     }
 
     public void removeUserInList(User s){
-        //users.remove(s);
         users.removeIf(t -> t.getUserId().equals(s.getUserId()));
     }
 
@@ -66,6 +63,5 @@ public class Role {
     public void setMax(int max) {
         this.max = max;
     }
-
 
 }

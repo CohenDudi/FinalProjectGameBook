@@ -82,9 +82,6 @@
             android:layout_marginRight="-5dp"
             android:textColor="@color/yellow"
             android:background="@drawable/button_background_right"/>
-
-
     </LinearLayout>
-
 
 </LinearLayout>

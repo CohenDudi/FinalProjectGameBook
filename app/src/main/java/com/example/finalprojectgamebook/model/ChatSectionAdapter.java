@@ -36,9 +36,8 @@ public class ChatSectionAdapter extends RecyclerView.Adapter<ChatSectionAdapter.
 
         public class ChatViewHolder extends RecyclerView.ViewHolder {
 
-            TextView name;
-            TextView msg;
-            ImageView newMsgIcon;
+            private TextView name;
+            private TextView msg;
 
             public ChatViewHolder(View itemView) {
                 super(itemView);
@@ -92,12 +91,8 @@ public class ChatSectionAdapter extends RecyclerView.Adapter<ChatSectionAdapter.
             holder.name.setText(chat.getName());
             holder.msg.setText(chat.getMsg());
     }
-
         @Override
         public int getItemCount() {
         return chats.size();
     }
-
-
-
 }

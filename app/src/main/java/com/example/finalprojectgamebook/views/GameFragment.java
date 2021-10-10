@@ -15,12 +15,9 @@ import android.view.ViewGroup;
 
 import com.example.finalprojectgamebook.R;
 import com.example.finalprojectgamebook.model.FireBaseModel;
-import com.example.finalprojectgamebook.model.FireBaseSectionChat;
 import com.example.finalprojectgamebook.model.Section;
 import com.example.finalprojectgamebook.model.SectionAdapter;
-import com.example.finalprojectgamebook.model.User;
-import com.example.finalprojectgamebook.viewmodel.feedViewModel;
-import com.example.finalprojectgamebook.viewmodel.gameViewModel;
+import com.example.finalprojectgamebook.viewmodel.GameViewModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -28,18 +25,15 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class gameFragment extends Fragment {
-    private gameViewModel gameViewModel;
-    List<Section> sections = new ArrayList<>();
-
-    SectionAdapter adapter;
+public class GameFragment extends Fragment {
+    private GameViewModel gameViewModel;
+    private List<Section> sections = new ArrayList<>();
+    private SectionAdapter adapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        gameViewModel = new ViewModelProvider(this).get(gameViewModel.class);
+        gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
         View root = inflater.inflate(R.layout.fragment_game, container, false);
-
         RecyclerView recyclerView = root.findViewById(R.id.recycler);
-
         sections = gameViewModel.getSections();
         adapter = new SectionAdapter(sections);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
@@ -51,29 +45,19 @@ public class gameFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("games",sections.get(position));
                 Navigation.findNavController(view).navigate(R.id.action_navigation_games_to_navigation_discover, bundle);
-
             }
 
             @Override
-            public void onMissionLongClicked(int position, View view) {
-
-            }
+            public void onMissionLongClicked(int position, View view) { }
 
             @Override
             public void onFavoriteClicked(int position, View view) {
                 List<String> usersIds = sections.get(position).getUsersId();
                 String selfId = FireBaseModel.getInstance().getUser().getUid();
-                /**User user = gameViewModel.getSelfUser();
-                if(!user.isFavorite(sections.get(position).getName())){
-                    user.addFavorite(sections.get(position).getName());
-                    gameViewModel.updateSelfUser(user);
-                }
-                 **/
-                if(usersIds.contains(selfId)){
+                if(usersIds.contains(selfId))
                     usersIds.remove(selfId);
-                }else{
+                else
                     usersIds.add(selfId);
-                }
                 FireBaseModel.getInstance().updateSection(sections.get(position),position);
             }
         });
@@ -85,16 +69,11 @@ public class gameFragment extends Fragment {
         gameViewModel.getFireBase().child("section").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //sections = gameViewModel.getSections();
                 adapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-
+            public void onCancelled(@NonNull DatabaseError error) { }
         });
     }
-
 }

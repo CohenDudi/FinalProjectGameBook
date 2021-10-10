@@ -10,12 +10,14 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     final String TAG = "MyFirebaseMessaging";
+    private FirebaseAuth firebaseAuth;
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
@@ -33,16 +35,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             NotificationManager manager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
             Notification.Builder builder = new Notification.Builder(this);
 
-            if(Build.VERSION.SDK_INT>=26) {
+            if(Build.VERSION.SDK_INT>=28) {
                 NotificationChannel channel = new NotificationChannel("id_1", "name_1", NotificationManager.IMPORTANCE_HIGH);
                 manager.createNotificationChannel(channel);
                 builder.setChannelId("id_1");
             }
-            builder.setContentTitle("new message from topic").setContentText(remoteMessage.getData().get("message")).setSmallIcon(android.R.drawable.star_on);
-
+            builder.setContentTitle("Hey " + firebaseAuth.getCurrentUser().getDisplayName() + "You have a new message!").setContentText(remoteMessage.getData().get("message")).setSmallIcon(android.R.drawable.star_on);
             manager.notify(1,builder.build());
-
-
         }
 
         // Check if message contains a notification payload.
@@ -62,7 +61,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // FCM registration token to your app server.
         //sendRegistrationToServer(s);
     }
-
 
 
 }

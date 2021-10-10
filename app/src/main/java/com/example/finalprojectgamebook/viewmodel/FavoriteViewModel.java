@@ -12,12 +12,12 @@ import com.example.finalprojectgamebook.model.Section;
 import java.util.ArrayList;
 import java.util.List;
 
-public class favoriteViewModel extends ViewModel {
+public class FavoriteViewModel extends ViewModel {
     private MutableLiveData<String> mText;
     private FireBaseSectionChat fireBaseSectionChat;
     private FireBaseModel fireBaseModel;
 
-    public favoriteViewModel() {
+    public FavoriteViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is favorite fragment");
         fireBaseModel = FireBaseModel.getInstance();

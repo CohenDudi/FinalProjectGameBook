@@ -25,7 +25,7 @@ public class FireBaseSectionChat {
     private Section section;
     private String usersId;
     private List<ChatSection> chats = new ArrayList<>();
-    List<HomePostLookingForGame> homePostLookingForGames = new ArrayList<>();
+    private List<HomePostLookingForGame> homePostLookingForGames = new ArrayList<>();
 
 
     public static FireBaseSectionChat getInstance(){
@@ -77,18 +77,14 @@ public class FireBaseSectionChat {
     }
 
 
-
     public void updateAllPosts(List<HomePostLookingForGame> homePostLookingForGames){
         mDatabase.child("section feed").child(section.getName()).setValue(homePostLookingForGames);
     }
 
 
-
-
     public void addNewPrivateMsg(ChatSection chatSection){
         chats.add(chatSection);
         mDatabase.child("private chat").child(usersId).setValue(chats);
-
     }
 
     public FirebaseUser getUser(){
@@ -118,11 +114,8 @@ public class FireBaseSectionChat {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError error) { }
         });
-
     }
 
     void readChat(){
@@ -159,13 +152,9 @@ public class FireBaseSectionChat {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError error) { }
         });
     }
-
-
 
     public List<ChatSection> getChats(){
         return chats;

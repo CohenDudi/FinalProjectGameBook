@@ -1,16 +1,14 @@
 package com.example.finalprojectgamebook.model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomePostLookingForGame {
-    List<Role> roles = new ArrayList();
-    String UserName;
-    String UserId;
-    String description;
-    String gameName;
-
+    private List<Role> roles = new ArrayList();
+    private String UserName;
+    private String UserId;
+    private String description;
+    private String gameName;
 
     public HomePostLookingForGame(){};
 

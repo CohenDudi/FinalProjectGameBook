@@ -34,8 +34,8 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
 
     public class ContactViewHolder extends RecyclerView.ViewHolder {
 
-        TextView name;
-        ImageView newMsgIcon;
+        private TextView name;
+        private ImageView newMsgIcon;
 
         public ContactViewHolder(View itemView) {
             super(itemView);

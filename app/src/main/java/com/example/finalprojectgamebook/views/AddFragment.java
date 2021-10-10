@@ -1,9 +1,9 @@
 package com.example.finalprojectgamebook.views;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -12,9 +12,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.provider.MediaStore;
@@ -22,26 +20,23 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
 import com.example.finalprojectgamebook.R;
 import com.example.finalprojectgamebook.model.FireBaseModel;
 import com.example.finalprojectgamebook.model.Section;
-import com.example.finalprojectgamebook.viewmodel.addViewModel;
-import com.example.finalprojectgamebook.viewmodel.feedViewModel;
+import com.example.finalprojectgamebook.viewmodel.AddViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-public class addFragment extends Fragment {
-    private addViewModel addViewModel;
+public class AddFragment extends Fragment {
+    private AddViewModel addViewModel;
     private FireBaseModel fireBaseModel;
 
     private EditText name;
@@ -50,15 +45,21 @@ public class addFragment extends Fragment {
     private Button addImgBtn;
     private Bitmap imageBitmap;
     private ImageView sectionImg;
-    String encoded;
+    private String encoded;
+    private final String[] okFileExtensions = new String[] {
+            "jpg",
+            "png",
+            "gif",
+            "jpeg"
+    };
 
 
-    public addFragment(){}
+    public AddFragment(){}
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         fireBaseModel = FireBaseModel.getInstance();
-        addViewModel = new ViewModelProvider(this).get(addViewModel.class);
+        addViewModel = new ViewModelProvider(this).get(AddViewModel.class);
         View root = inflater.inflate(R.layout.fragment_add, container, false);
         name = root.findViewById(R.id.add_new_section_name);
         type = root.findViewById(R.id.add_new_section_type);
@@ -66,7 +67,6 @@ public class addFragment extends Fragment {
         addImgBtn = root.findViewById(R.id.add_picture_btn);
         sectionImg = root.findViewById(R.id.img_section);
         Button buttonNewSection = root.findViewById(R.id.button_new_section);
-
 
         buttonNewSection.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,19 +118,29 @@ public class addFragment extends Fragment {
                         if (result.getResultCode() == Activity.RESULT_OK) {
                             Intent data = result.getData();
                             Uri imageUri = data.getData();
-                            try {
-                                imageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getApplicationContext().getContentResolver(), imageUri);
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                            if (accept(imageUri)) {
+                                try {
+                                    imageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getApplicationContext().getContentResolver(), imageUri);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                imageBitmap.compress(Bitmap.CompressFormat.JPEG, 10, baos); //bm is the bitmap object
+                                byte[] b = baos.toByteArray();
+                                encoded = Base64.encodeToString(b, Base64.DEFAULT);
+                                sectionImg.setImageBitmap(imageBitmap);
+
+                                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) sectionImg.getLayoutParams();
+                                params.width = 450;
+                                params.height = 450;
+                                // existing height is ok as is, no need to edit it
+                                sectionImg.setLayoutParams(params);
+
                             }
-
-                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 10, baos); //bm is the bitmap object
-                            byte[] b = baos.toByteArray();
-                            encoded = Base64.encodeToString(b, Base64.DEFAULT);
-                            sectionImg.setImageBitmap(imageBitmap);
-
                         }
+                        else
+                            Snackbar.make(root , "Invalid image type.", Snackbar.LENGTH_SHORT).show();
                     }
                 });
 
@@ -149,22 +159,17 @@ public class addFragment extends Fragment {
 
             }
         });
-
-
-
-
-        /**
-        final TextView textView = root.findViewById(R.id.add_Text);
-
-        addViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-
-                textView.setText(s);
-            }
-        });
-         **/
-
         return root;
+    }
+
+    public boolean accept(Uri uri) {
+        String extension;
+        ContentResolver contentResolver = getContext().getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        extension= mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
+        for(int i = 0; i < okFileExtensions.length; i++){
+            if(okFileExtensions[i].equals(extension)) return true;
+        }
+        return false;
     }
 }

@@ -31,14 +31,11 @@ import com.android.volley.toolbox.Volley;
 import com.example.finalprojectgamebook.R;
 import com.example.finalprojectgamebook.model.ChatSection;
 import com.example.finalprojectgamebook.model.ChatSectionAdapter;
-import com.example.finalprojectgamebook.model.Section;
-import com.example.finalprojectgamebook.viewmodel.PriavteChatViewModel;
-import com.example.finalprojectgamebook.viewmodel.feedViewModel;
+import com.example.finalprojectgamebook.viewmodel.PrivateChatViewModel;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,23 +46,19 @@ import java.util.List;
 import java.util.Map;
 
 public class PrivateChatFragment extends Fragment {
-    private PriavteChatViewModel priavteChatViewModel;
-    String usersId;
-    String friendId;
-    List<ChatSection> chats = new ArrayList<>();
-    RecyclerView recyclerView;
-    ChatSectionAdapter adapter;
-    FirebaseUser user;
-    FirebaseMessaging messaging = FirebaseMessaging.getInstance();
-    BroadcastReceiver receiver;
-
+    private PrivateChatViewModel priavteChatViewModel;
+    private String usersId;
+    private String friendId;
+    private List<ChatSection> chats = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private ChatSectionAdapter adapter;
+    private FirebaseUser user;
+    private BroadcastReceiver receiver;
     final String API_TOKEN_KEY = "AAAAV1YpTgI:APA91bFsz1JYI6wx0TKdJK10hsrFthaZQlwLp6uLApQF-Z_3IHmneGgEgzkCZ1QTxvjgtRhxUnSAhTogwGm4iK7ObbbprcJCl1gy7T9f5YyMJhSX--IqWkzt1ZPZ1PFt1ypwXNOhQhGX";
 
-
-
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        priavteChatViewModel = new ViewModelProvider(this).get(PriavteChatViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_priavte_chat, container, false);
+        priavteChatViewModel = new ViewModelProvider(this).get(PrivateChatViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_private_chat, container, false);
         usersId = (String)getArguments().getSerializable("chatId");
         friendId = (String)getArguments().getSerializable("friendId");
         priavteChatViewModel.changeMsgSeen(friendId,1);
@@ -93,7 +86,6 @@ public class PrivateChatFragment extends Fragment {
                 editText.setText("");
                 hideSoftKeyboard(getActivity());
                 priavteChatViewModel.changeMsgSeen(friendId,0);
-
             }
         });
 
@@ -107,18 +99,11 @@ public class PrivateChatFragment extends Fragment {
                 chats = priavteChatViewModel.getChats();
                 adapter.notifyDataSetChanged();
                 recyclerView.scrollToPosition(chats.size()-1);
-
-
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-
+            public void onCancelled(@NonNull DatabaseError error) { }
         });
-
-
     }
 
     public static void hideSoftKeyboard(Activity activity) {
@@ -141,7 +126,6 @@ public class PrivateChatFragment extends Fragment {
     }
 
     public void sendNotification(String friendId,String text){
-        //messaging.subscribeToTopic(friendId);
         final JSONObject rootObject  = new JSONObject();
         try{
             rootObject.put("to", "/topics/"+friendId);
@@ -151,9 +135,7 @@ public class PrivateChatFragment extends Fragment {
             RequestQueue queue = Volley.newRequestQueue(getContext());
             StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                 @Override
-                public void onResponse(String response) {
-
-                }
+                public void onResponse(String response) { }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
@@ -183,15 +165,9 @@ public class PrivateChatFragment extends Fragment {
 
         receiver = new BroadcastReceiver() {
             @Override
-            public void onReceive(Context context, Intent intent) {
-
-                //messageTv.setText(intent.getStringExtra("message"));
-            }
+            public void onReceive(Context context, Intent intent) { }
         };
-
-
         IntentFilter filter = new IntentFilter("message_received");
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(receiver,filter);
-
     }
 }

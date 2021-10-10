@@ -15,10 +15,8 @@ import android.view.ViewGroup;
 
 import com.example.finalprojectgamebook.R;
 import com.example.finalprojectgamebook.model.ContactAdapter;
-import com.example.finalprojectgamebook.model.SectionAdapter;
 import com.example.finalprojectgamebook.model.User;
 import com.example.finalprojectgamebook.viewmodel.ContactViewModel;
-import com.example.finalprojectgamebook.viewmodel.feedViewModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -36,9 +34,7 @@ public class ContactsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         contactViewModel = new ViewModelProvider(this).get(ContactViewModel.class);
         View root = inflater.inflate(R.layout.fragment_contacts, container, false);
-
         RecyclerView recyclerView = root.findViewById(R.id.recycler_contact);
-
         users = contactViewModel.getConacts();
         adapter = new ContactAdapter(users);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
@@ -60,13 +56,10 @@ public class ContactsFragment extends Fragment {
                 bundle.putString("friendId",users.get(position).getUserId());
 
                 Navigation.findNavController(view).navigate(R.id.action_navigation_Contacts_to_privateChatFragment, bundle);
-
             }
 
             @Override
-            public void onContactLongClicked(int position, View view) {
-
-            }
+            public void onContactLongClicked(int position, View view) { }
         });
 
         updateContact();
@@ -85,12 +78,8 @@ public class ContactsFragment extends Fragment {
                 }
 
                 @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-
+                public void onCancelled(@NonNull DatabaseError error) { }
             });
-
         }
     }
 

@@ -6,7 +6,7 @@
     app:startDestination="@id/navigation_feed">
     <fragment
         android:id="@+id/navigation_feed"
-        android:name="com.example.finalprojectgamebook.views.feedFragment"
+        android:name="com.example.finalprojectgamebook.views.FeedFragment"
         tools:layout="@layout/fragment_feed" >
         <action
             android:id="@+id/action_navigation_feed_to_navigation_favorite"
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_favorite"
-        android:name="com.example.finalprojectgamebook.views.favoriteFragment"
+        android:name="com.example.finalprojectgamebook.views.FavoriteFragment"
         tools:layout="@layout/fragment_favorite" >
         <action
             android:id="@+id/action_navigation_favorite_to_navigation_feed"
@@ -25,12 +25,12 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_add"
-        android:name="com.example.finalprojectgamebook.views.addFragment"
+        android:name="com.example.finalprojectgamebook.views.AddFragment"
         tools:layout="@layout/fragment_add" />
 
     <fragment
         android:id="@+id/navigation_games"
-        android:name="com.example.finalprojectgamebook.views.gameFragment"
+        android:name="com.example.finalprojectgamebook.views.GameFragment"
         tools:layout="@layout/fragment_game" >
         <action
             android:id="@+id/action_navigation_games_to_sectionFragment"
@@ -42,7 +42,7 @@
 
     <fragment
         android:id="@+id/sectionFragment"
-        android:name="com.example.finalprojectgamebook.views.sectionFragment"
+        android:name="com.example.finalprojectgamebook.views.SectionFragment"
         tools:layout="@layout/fragment_section" />
 
     <fragment
@@ -65,5 +65,5 @@
     <fragment
         android:id="@+id/navigation_Private_Chat"
         android:name="com.example.finalprojectgamebook.views.PrivateChatFragment"
-        tools:layout="@layout/fragment_priavte_chat" />
+        tools:layout="@layout/fragment_private_chat" />
 </navigation>
