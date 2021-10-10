@@ -20,6 +20,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     final String TAG = "MyFirebaseMessaging";
     private FirebaseAuth firebaseAuth;
 
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 

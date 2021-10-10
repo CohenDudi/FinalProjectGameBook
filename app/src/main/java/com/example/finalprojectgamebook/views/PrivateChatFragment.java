@@ -82,7 +82,7 @@ public class PrivateChatFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 priavteChatViewModel.addNewMsg(new ChatSection(user.getDisplayName(),user.getUid(),editText.getText().toString()));
-                sendNotification(friendId,editText.getText().toString());
+                sendNotification(friendId, editText.getText().toString());
                 editText.setText("");
                 hideSoftKeyboard(getActivity());
                 priavteChatViewModel.changeMsgSeen(friendId,0);
@@ -128,7 +128,7 @@ public class PrivateChatFragment extends Fragment {
     public void sendNotification(String friendId,String text){
         final JSONObject rootObject  = new JSONObject();
         try{
-            rootObject.put("to", "/topics/"+friendId);
+            rootObject.put("to", "/topics/" + friendId);
             rootObject.put("data",new JSONObject().put("message",text));
             String url = "https://fcm.googleapis.com/fcm/send";
 

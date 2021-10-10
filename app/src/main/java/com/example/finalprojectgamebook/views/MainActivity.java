@@ -134,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
                         break;
                     case R.id.item_sign_out:
+                        messaging.unsubscribeFromTopic(FirebaseAuth.getInstance().getCurrentUser().getUid());
                         loginRegisterViewModel.signOut();
                         loginRegisterViewModel.signInAnonymously();
                         break;

@@ -228,6 +228,7 @@ public class FireBaseModel {
         return user;
     }
 
+
     public void setNewListener(FirebaseAuth.AuthStateListener authStateListener){
         firebaseAuth.addAuthStateListener(authStateListener);
     }
