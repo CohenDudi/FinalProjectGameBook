@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+    <resources>
+
+    <string name="app_name">הרשמות לגיימרים</string>
+
+    <string name="Please_Login">התחבר בבקשה</string>
+
+    <string name="Sign_Up">הרשמה</string>
+
+    <string name="Sign_In">התחברות</string>
+
+    <string name="Hello_Guest">שלום אורח</string>
+
+    <string name="Feed">ראשי</string>
+
+    <string name="Favorite">מועדפים</string>
+
+    <string name="Games">משחקים</string>
+
+    <string name="Add">הוספה</string>
+
+    <string name="Contacts">אנשי קשר</string>
+
+    <string name="Username">שם משתמש</string>
+
+    <string name="Password">סיסמה</string>
+
+    <string name="Close">סגירה</string>
+
+    <string name="Change_Photo">שינוי תמונה</string>
+
+    <string name="Add_New_Section">הוספת מדור חדש</string>
+
+    <string name="Type_New_Section">הקלד מדור חדש</string>
+
+    <string name="Type_New_Type">הקלד סגנון חדש</string>
+
+    <string name="Type_New_Description">הקלד תיאור חדש</string>
+
+    <string name="Add_New_Picture">הוסף תמונה חדשה</string>
+
+    <string name="Email_Sent">המייל נשלח.</string>
+
+    <string name="Invalid_Email">מייל לא נכון או לא קיים.</string>
+
+    <string name="Please_Enter_Email">אנא הקלד אימייל.</string>
+
+    <string name="Username_Changed">שם המשתמש שונה.</string>
+
+    <string name="Password_Changed">הסיסמה שונתה</string>
+
+    <string name="Password_Not_Changed">"הסיסמה לא שונתה "</string>
+
+    <string name="Created">" נוצר!"</string>
+
+    <string name="Name_Already_Exist">השם קיים כבר</string>
+
+    <string name="Game_Name_Is_Empty">הוסף שם המשחק</string>
+
+    <string name="Description_Is_Empty">הוסף את תיאור המשחק</string>
+
+    <string name="Game_Type_Is_Empty">הוסף את סוג המשחק</string>
+
+    <string name="Empty">ריק</string>
+
+    <string name="Register_Failed">הרשמה נכשלה</string>
+
+    <string name="Authentication_Failed">אימות נכשל.</string>
+
+    <string name="Sign_In_Successful">ההתחברות בוצעה בהצלחה</string>
+
+    <string name="Sign_In_Failed">התחברות נכשלה</string>
+
+    <string name="You_have_a_new_message">יש לך הודעה חדשה!</string>
+
+    <string name="Description_is_too_long">התיאור ארוך מידי</string>
+
+    <string name="Please_add_a_picture">" בבקשה הוסף תמונה"</string>
+
+    <string name="Invalid_Image_Type">סוג התמונה לא מתאים</string>
+
+    <string name="Roll">תפקיד</string>
+
+    <string name="Enter_Description">הכנס תיאור</string>
+
+    <string name="Add_a_New_Roll">הוסף תפקיד חדש:</string>
+
+    <string name="Name">שם:</string>
+
+    <string name="Enter_Name">הכנס שם</string>
+
+    <string name="Number">מספר:</string>
+
+    <string name="Please_Enter_A_Valid_Input">בבקשה הכנס קלט תקין.</string>
+
+    <string name="Submit">צור</string>
+
+    <string name="Cancel">ביטול</string>
+
+    <string name="Add_To_Friends">הוסף לחברים</string>
+
+    <string name="Enter_Email">הכנס אימייל</string>
+
+    <string name="Enter_Password">הכנס סיסמה</string>
+
+    <string name="Sign_Out">התנתקות</string>
+
+    <string name="I_Forgot_My_Password">שכחתי את הסיסמה</string>
+
+    <string name="Chat">צאט</string>
+
+    <string name="Discover">ראשי</string>
+
+    <string name="Send_Me_An_Email">שלח לי מייל</string>
+
+    <string name="Welcome">"ברוך הבא "</string>
+    <string name="YourGroupNeedYou">הקבוצה שלך צריכה אותך!</string>
+    <string name="TimeToCheckYourGroup">הזמן לבדוק את הקבוצה</string>
+
+</resources>

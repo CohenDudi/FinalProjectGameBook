@@ -1,6 +1,14 @@
 package com.example.finalprojectgamebook.model;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.widget.TimePicker;
+
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class HomePostLookingForGame {
@@ -57,6 +65,5 @@ public class HomePostLookingForGame {
     public String getGameName() {
         return gameName;
     }
-
 
 }

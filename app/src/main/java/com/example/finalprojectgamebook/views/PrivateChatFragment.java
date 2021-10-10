@@ -76,6 +76,17 @@ public class PrivateChatFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setHasFixedSize(false);
         recyclerView.setAdapter(adapter);
+        adapter.setListener(new ChatSectionAdapter.chatListener() {
+            @Override
+            public void onChatClicked(int position, View view) {
+
+            }
+
+            @Override
+            public void onChatLongClicked(int position, View view) {
+
+            }
+        });
         updateFeed();
 
         imageButton.setOnClickListener(new View.OnClickListener() {

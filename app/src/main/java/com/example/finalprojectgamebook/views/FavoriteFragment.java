@@ -70,6 +70,11 @@ public class FavoriteFragment extends Fragment {
             public void onLeaderClicked(int position, View view) {
 
             }
+
+            @Override
+            public void onTimeClicked(int position, View view) {
+
+            }
         });
         updatePosts();
         return root;

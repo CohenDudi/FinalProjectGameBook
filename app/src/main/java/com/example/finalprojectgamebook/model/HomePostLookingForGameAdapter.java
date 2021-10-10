@@ -37,6 +37,7 @@ public class HomePostLookingForGameAdapter extends RecyclerView.Adapter<HomePost
         void onHomePostLookingForGameAdapterRecyclerClicked(int position, View view);
         void onClosedClicked(int position,View view);
         void onLeaderClicked(int position,View view);
+        void onTimeClicked(int position,View view);
     }
 
     private HomePostLookingForGameAdapter.HomePostLookingForGameAdapterListener listener;
@@ -52,6 +53,7 @@ public class HomePostLookingForGameAdapter extends RecyclerView.Adapter<HomePost
         RecyclerView recyclerView;
         ImageButton closeBtn;
         TextView gameName;
+        ImageButton timeBtn;
 
         public HomePostLookingForGameViewHolder(View itemView) {
             super(itemView);
@@ -61,6 +63,7 @@ public class HomePostLookingForGameAdapter extends RecyclerView.Adapter<HomePost
             recyclerView = itemView.findViewById(R.id.recyclerLookingForGame);
             closeBtn = itemView.findViewById(R.id.close_home_game_btn);
             gameName = itemView.findViewById(R.id.game_name_tv);
+            timeBtn = itemView.findViewById(R.id.time_start_btn);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -99,6 +102,13 @@ public class HomePostLookingForGameAdapter extends RecyclerView.Adapter<HomePost
                 }
             });
 
+            timeBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onTimeClicked(getAdapterPosition(),v);
+                }
+            });
+
 
         }
     }
@@ -132,6 +142,7 @@ public class HomePostLookingForGameAdapter extends RecyclerView.Adapter<HomePost
                holder.closeBtn.setVisibility(View.VISIBLE);
         if(flagIsFeed==1){
             holder.closeBtn.setVisibility(View.INVISIBLE);
+            holder.timeBtn.setVisibility(View.INVISIBLE);
 
         }
 

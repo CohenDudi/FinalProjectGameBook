@@ -14,12 +14,12 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
-public class roleListAdapter extends RecyclerView.Adapter<roleListAdapter.roleListViewHolder> {
+public class RoleListAdapter extends RecyclerView.Adapter<RoleListAdapter.roleListViewHolder> {
 
     private List<User> users;
     private String originalPoster;
 
-    public roleListAdapter(List<User> users,String originalPoster) {
+    public RoleListAdapter(List<User> users, String originalPoster) {
         this.originalPoster = originalPoster;
         this.users = users;
     }
@@ -30,9 +30,9 @@ public class roleListAdapter extends RecyclerView.Adapter<roleListAdapter.roleLi
         void onRemoveClicked(int position,View view);
     }
 
-    private roleListAdapter.roleListListener listener;
+    private RoleListAdapter.roleListListener listener;
 
-    public void setListener(roleListAdapter.roleListListener listener) {
+    public void setListener(RoleListAdapter.roleListListener listener) {
         this.listener = listener;
     }
 
@@ -73,14 +73,14 @@ public class roleListAdapter extends RecyclerView.Adapter<roleListAdapter.roleLi
 
     @NonNull
     @Override
-    public roleListAdapter.roleListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RoleListAdapter.roleListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.name_card,parent,false);
-        roleListAdapter.roleListViewHolder roleListViewHolder = new roleListAdapter.roleListViewHolder(view);
+        RoleListAdapter.roleListViewHolder roleListViewHolder = new RoleListAdapter.roleListViewHolder(view);
         return roleListViewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull roleListAdapter.roleListViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RoleListAdapter.roleListViewHolder holder, int position) {
 
         User user = users.get(position);
         holder.name.setText(user.getName());

@@ -152,8 +152,10 @@ public class MainActivity extends AppCompatActivity {
                                     fireBase.getFirebaseAuth().sendPasswordResetEmail(usernameEt.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful())
+                                            if (task.isSuccessful()) {
                                                 Snackbar.make(findViewById(android.R.id.content), R.string.Email_Sent, Snackbar.LENGTH_LONG).show();
+                                                alertDialog.dismiss();
+                                            }
                                             if (!task.isSuccessful())
                                                 Snackbar.make(findViewById(android.R.id.content), R.string.Invalid_Email, Snackbar.LENGTH_LONG).show();
                                         }

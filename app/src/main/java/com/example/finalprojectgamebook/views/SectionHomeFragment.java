@@ -1,5 +1,10 @@
 package com.example.finalprojectgamebook.views;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -8,6 +13,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,14 +28,17 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.example.finalprojectgamebook.R;
+import com.example.finalprojectgamebook.model.AlertReceiver;
 import com.example.finalprojectgamebook.model.FireBaseModel;
 import com.example.finalprojectgamebook.model.HomePostLookingForGame;
 import com.example.finalprojectgamebook.model.HomePostLookingForGameAdapter;
 import com.example.finalprojectgamebook.model.Role;
 import com.example.finalprojectgamebook.model.RoleAdapter;
 import com.example.finalprojectgamebook.model.Section;
+import com.example.finalprojectgamebook.model.TimePickerFragment;
 import com.example.finalprojectgamebook.model.User;
 import com.example.finalprojectgamebook.viewmodel.SectionViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -38,7 +47,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class SectionHomeFragment extends Fragment {
@@ -145,6 +156,14 @@ public class SectionHomeFragment extends Fragment {
             @Override
             public void onLeaderClicked(int position, View view) {
                 openFriendProfile(position);
+            }
+
+            @Override
+            public void onTimeClicked(int position, View view) {
+
+                DialogFragment timePicker = new TimePickerFragment();
+                timePicker.show(getFragmentManager(), "time picker");
+
             }
         });
         updatePosts();
@@ -301,4 +320,6 @@ public class SectionHomeFragment extends Fragment {
         }
         return false;
     }
+
+
 }

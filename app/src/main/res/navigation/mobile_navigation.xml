@@ -26,7 +26,14 @@
     <fragment
         android:id="@+id/navigation_add"
         android:name="com.example.finalprojectgamebook.views.AddFragment"
-        tools:layout="@layout/fragment_add" />
+        tools:layout="@layout/fragment_add" >
+        <action
+            android:id="@+id/action_navigation_add_to_navigation_discover"
+            app:destination="@id/navigation_discover" />
+        <action
+            android:id="@+id/action_navigation_add_to_navigation_games"
+            app:destination="@id/navigation_games" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_games"

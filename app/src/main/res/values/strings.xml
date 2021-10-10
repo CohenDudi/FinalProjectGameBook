@@ -56,4 +56,7 @@
     <string name="Discover">Discover</string>
     <string name="Send_Me_An_Email">Send me an Email</string>
     <string name="Welcome">"Welcome "</string>
+    <string name="YourGroupNeedYou">Your group need you!</string>
+    <string name="TimeToCheckYourGroup">Time to check your group</string>
+
 </resources>

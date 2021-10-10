@@ -138,11 +138,11 @@ public class RoleAdapter extends RecyclerView.Adapter<RoleAdapter.RoleViewHolder
 
 
         if(flag == 1){
-            roleListAdapter adapter = new roleListAdapter(role.getUsers(),originalPoster);
+            RoleListAdapter adapter = new RoleListAdapter(role.getUsers(),originalPoster);
             holder.recyclerView.setLayoutManager(new LinearLayoutManager(context));
             holder.recyclerView.setHasFixedSize(true);
             holder.recyclerView.setAdapter(adapter);
-            adapter.setListener(new roleListAdapter.roleListListener() {
+            adapter.setListener(new RoleListAdapter.roleListListener() {
                 int tempPos = position;
                 @Override
                 public void onRoleListClicked(int position, View view) {

@@ -17,13 +17,34 @@
         android:background="@color/gray_two"
 
         >
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="gameName"
             android:id="@+id/game_name_tv"
             android:textColor="@color/white"/>
-    <LinearLayout
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="right">
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/alarm_on"
+                    android:background="@null"
+                    android:id="@+id/time_start_btn"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"

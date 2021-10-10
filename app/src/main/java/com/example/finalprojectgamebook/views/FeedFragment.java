@@ -82,6 +82,11 @@ public class FeedFragment extends Fragment {
             public void onLeaderClicked(int position, View view) {
 
             }
+
+            @Override
+            public void onTimeClicked(int position, View view) {
+
+            }
         });
         updatePosts();
     }

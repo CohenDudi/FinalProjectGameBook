@@ -14,6 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
 import android.util.Base64;
@@ -80,7 +81,8 @@ public class AddFragment extends Fragment {
                 switch (validateSection){
                     case 0:
                         addViewModel.addNewSection(section);
-                        Snackbar.make(root ,section.getName() + R.string.Created , Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(root ,section.getName() + getText(R.string.Created) , Snackbar.LENGTH_SHORT).show();
+                        Navigation.findNavController(v).navigate(R.id.action_navigation_add_to_navigation_games);
                         break;
                     case 1:
                         Snackbar.make(root , R.string.Name_Already_Exist, Snackbar.LENGTH_SHORT).show();
